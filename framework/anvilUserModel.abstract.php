@@ -49,6 +49,7 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
         $this->fields->canLogin->fieldName = 'can_login';
         $this->fields->canLogin->fieldType = anvilModelField::DATA_TYPE_BOOLEAN;
+        $this->canLogin = true;
 
         $this->fields->password->activity = false;
         $this->fields->password->fieldName = 'password';
