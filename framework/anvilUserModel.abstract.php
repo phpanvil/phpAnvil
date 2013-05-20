@@ -8,6 +8,7 @@ require_once 'anvilRSModel.abstract.php';
  * @property string $lastName
  * @property string $email
  * @property int    $timezoneID
+ * @property bool   $canLogin
  * @property string $password
  * @property string $token
  * @property string $lastLoginDTS
@@ -52,6 +53,10 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
         $this->fields->timezoneID->fieldName = 'timezone_id';
         $this->fields->timezoneID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+
+        $this->fields->canLogin->fieldName = 'can_login';
+        $this->fields->canLogin->fieldType = anvilModelField::DATA_TYPE_BOOLEAN;
+        $this->canLogin = true;
 
         $this->fields->password->activity = false;
         $this->fields->password->fieldName = 'password';
