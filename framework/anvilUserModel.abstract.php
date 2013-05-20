@@ -137,6 +137,7 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
             $sql = 'SELECT u.* FROM ' . $this->primaryTableName . ' AS u';
         $sql .= ' WHERE u.email=' . $this->dataConnection->dbString($email);
         $sql .= ' AND u.password=' . $this->dataConnection->dbString($password);
+        $sql .= ' AND u.can_login IS TRUE';
 
         if ($activeOnly) {
             $sql .= ' AND u.record_status_id=' . self::RECORD_STATUS_ACTIVE;
