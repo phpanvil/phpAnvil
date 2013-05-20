@@ -19,17 +19,11 @@ abstract class anvilAccountModelAbstract extends anvilRSModelAbstract
         $this->fields->id->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->token->fieldName = 'token';
-        $this->fields->token->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
-        $this->fields->token->maxLength = 16;
 
         $this->fields->name->fieldName = 'name';
-        $this->fields->name->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
-        $this->fields->name->maxLength = 40;
         $this->fields->name->required = true;
 
         $this->fields->email->fieldName = 'email';
-        $this->fields->email->fieldType = anvilModelField::DATA_TYPE_EMAIL;
-        $this->fields->email->maxLength = 45;
     }
 
 
@@ -112,13 +106,7 @@ abstract class anvilAccountModelAbstract extends anvilRSModelAbstract
         global $phpAnvil;
 
         if (!empty($this->token)) {
-            $domain = isset($_SERVER['HTTP_HOST'])
-                    ? (($_SERVER['HTTP_HOST'] != 'localhost')
-                            ? $_SERVER['HTTP_HOST']
-                            : false)
-                    : false;
-
-            setcookie($phpAnvil->application->cookieAccountToken, $phpAnvil->encrypt($this->token), time() + 60 * 60 * 24 * 365, '/', $domain, true, true);
+            setcookie($phpAnvil->application->cookieAccountToken, $phpAnvil->encrypt($this->token), time() + 60 * 60 * 24 * 365, '/');
 //            setcookie($phpAnvil->application->cookieAccountToken, $phpAnvil->encrypt($this->token), time() + $phpAnvil->session->innactiveTimeout, '/');
         }
     }
@@ -128,11 +116,7 @@ abstract class anvilAccountModelAbstract extends anvilRSModelAbstract
     {
         global $phpAnvil;
 
-        $domain = ($_SERVER['HTTP_HOST'] != 'localhost')
-                ? $_SERVER['HTTP_HOST']
-                : false;
-
-        setcookie($phpAnvil->application->cookieAccountToken, '', time() - 3600, '/', $domain, true, true);
+        setcookie($phpAnvil->application->cookieAccountToken, '', time() - 3600, '/');
     }
 
     public function save($sql = '', $id_sql = '')

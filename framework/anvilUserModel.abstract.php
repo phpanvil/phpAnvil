@@ -8,6 +8,7 @@ require_once 'anvilRSModel.abstract.php';
  * @property string $lastName
  * @property string $email
  * @property int    $timezoneID
+ * @property bool   $canLogin
  * @property string $password
  * @property string $token
  * @property string $lastLoginDTS
@@ -33,29 +34,25 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
         $this->fields->id->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->token->fieldName = 'token';
-        $this->fields->token->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
-        $this->fields->token->maxLength = 16;
 
         $this->fields->accountID->fieldName = 'account_id';
-        $this->fields->accountID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+        $this->fields->accountID->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->firstName->fieldName = 'first_name';
-        $this->fields->firstName->fieldType = anvilModelField::DATA_TYPE_ALPHA_STRING;
-        $this->fields->firstName->maxLength = 25;
 
         $this->fields->lastName->fieldName  = 'last_name';
-        $this->fields->lastName->fieldType = anvilModelField::DATA_TYPE_ALPHA_STRING;
-        $this->fields->lastName->maxLength = 25;
 
         $this->fields->email->fieldName = 'email';
-        $this->fields->email->fieldType = anvilModelField::DATA_TYPE_EMAIL;
 
         $this->fields->timezoneID->fieldName = 'timezone_id';
-        $this->fields->timezoneID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+        $this->fields->timezoneID->fieldType = anvilModelField::DATA_TYPE_NUMBER;
+
+        $this->fields->canLogin->fieldName = 'can_login';
+        $this->fields->canLogin->fieldType = anvilModelField::DATA_TYPE_BOOLEAN;
 
         $this->fields->password->activity = false;
         $this->fields->password->fieldName = 'password';
-        $this->fields->password->fieldType = anvilModelField::DATA_TYPE_PASSWORD;
+//        $this->fields->token->fieldName    = 'token';
 
         $this->fields->lastLoginDTS->activity = false;
         $this->fields->lastLoginDTS->fieldName = 'last_login_dts';
@@ -63,21 +60,19 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
         $this->fields->lastLoginSessionID->activity = false;
         $this->fields->lastLoginSessionID->fieldName = 'last_login_session_id';
-        $this->fields->lastLoginSessionID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+        $this->fields->lastLoginSessionID->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->supportingAccountID->fieldName = 'supporting_account_id';
-        $this->fields->supportingAccountID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+        $this->fields->supportingAccountID->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->supportingUserID->fieldName = 'supporting_user_id';
-        $this->fields->supportingUserID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
+        $this->fields->supportingUserID->fieldType = anvilModelField::DATA_TYPE_NUMBER;
 
         $this->fields->enableDebug->fieldName = 'enable_debug';
         $this->fields->enableDebug->fieldType = anvilModelField::DATA_TYPE_BOOLEAN;
 
         $this->fields->tempToken->activity = false;
         $this->fields->tempToken->fieldName = 'temp_token';
-        $this->fields->tempToken->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
-        $this->fields->tempToken->maxLength = 16;
 
         $this->fields->tempTokenDTS->activity = false;
         $this->fields->tempTokenDTS->fieldName = 'temp_token_dts';
@@ -132,11 +127,10 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
     public function loadByLogin($email = '', $password = '', $activeOnly = true)
     {
-        $email = $this->clean($this->fields->email,$email);
-
-            $sql = 'SELECT u.* FROM ' . $this->primaryTableName . ' AS u';
+        $sql = 'SELECT u.* FROM ' . $this->primaryTableName . ' AS u';
         $sql .= ' WHERE u.email=' . $this->dataConnection->dbString($email);
         $sql .= ' AND u.password=' . $this->dataConnection->dbString($password);
+        $sql .= ' AND u.can_login IS TRUE';
 
         if ($activeOnly) {
             $sql .= ' AND u.record_status_id=' . self::RECORD_STATUS_ACTIVE;
@@ -152,20 +146,16 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
     {
         global $phpAnvil;
 
-        if (empty($email) && isset($_POST['email'])) {
+        if (empty($email)) {
             $email = $_POST['email'];
         }
 
-        $return = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-        if ($return) {
-            if (empty($password) && isset($_POST['password'])) {
-                $password = $phpAnvil->hash($this->clean($this->fields->password, $_POST['password']));
+        if (empty($password)) {
+            $password = $phpAnvil->hash($_POST['password']);
 //            $password = $_POST['password'];
-            }
-
-            $return = $this->loadByLogin($email, $password);
         }
+
+        $return = $this->loadByLogin($email, $password);
 
         return $return;
     }
@@ -173,8 +163,6 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
     public function loadByEmail($email)
     {
-        $email = $this->clean($this->fields->email, $email);
-
         $sql = 'SELECT *';
         $sql .= ' FROM ' . $this->primaryTableName;
         $sql .= ' WHERE email=' . $this->dataConnection->dbString($email);
@@ -191,8 +179,6 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
         if (empty($token)) {
             $token = $this->tempToken;
         }
-
-        $token = $this->clean($this->fields->tempToken, $token);
 
         $sql = 'SELECT *';
         $sql .= ' FROM ' . $this->primaryTableName;
@@ -213,8 +199,6 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
         if (empty($token)) {
             $token = $this->token;
         }
-
-        $token = $this->clean($this->fields->token, $token);
 
         $sql = 'SELECT *';
         $sql .= ' FROM ' . $this->primaryTableName;
@@ -261,16 +245,10 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
         global $phpAnvil;
 
         if (!empty($this->token)) {
-            $domain = isset($_SERVER['HTTP_HOST'])
-                    ? (($_SERVER['HTTP_HOST'] != 'localhost')
-                            ? $_SERVER['HTTP_HOST']
-                            : false)
-                    : false;
-
 //            setcookie($phpAnvil->application->cookieUserID, $phpAnvil->encrypt($this->id), time() + 60 * 60 * 24 * 365, '/');
 //            setcookie($phpAnvil->application->cookieUserToken, $phpAnvil->encrypt($this->token), time() + 60 * 60 * 24 * 365, '/');
-            setcookie($phpAnvil->application->cookieUserID, $phpAnvil->encrypt($this->id), time() + $phpAnvil->session->innactiveTimeout, '/', $domain, true, true);
-            setcookie($phpAnvil->application->cookieUserToken, $phpAnvil->encrypt($this->token), time() + $phpAnvil->session->innactiveTimeout, '/', $domain, true, true);
+            setcookie($phpAnvil->application->cookieUserID, $phpAnvil->encrypt($this->id), time() + $phpAnvil->session->innactiveTimeout, '/');
+            setcookie($phpAnvil->application->cookieUserToken, $phpAnvil->encrypt($this->token), time() + $phpAnvil->session->innactiveTimeout, '/');
         }
     }
 
@@ -279,12 +257,8 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
     {
         global $phpAnvil;
 
-        $domain = ($_SERVER['HTTP_HOST'] != 'localhost')
-                ? $_SERVER['HTTP_HOST']
-                : false;
-
-        setcookie($phpAnvil->application->cookieUserID, '', time() - 3600, '/', $domain, true, true);
-        setcookie($phpAnvil->application->cookieUserToken, '', time() - 3600, '/', $domain, true, true);
+        setcookie($phpAnvil->application->cookieUserID, '', time() - 3600, '/');
+        setcookie($phpAnvil->application->cookieUserToken, '', time() - 3600, '/');
     }
 
     public function hashPassword($password = '')

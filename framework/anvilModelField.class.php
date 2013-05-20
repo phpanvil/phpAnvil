@@ -13,8 +13,6 @@ class anvilModelField
     const DATA_TYPE_ADD_DTS = 6;
     const DATA_TYPE_DTS     = 3;
 
-    const DATA_TYPE_TIME = 8;
-
     //---- Date Data Types Without Timezone Conversions ----------------------
     const DATA_TYPE_DATE_STRING = 14;
     const DATA_TYPE_DTS_STRING = 15;
@@ -24,33 +22,16 @@ class anvilModelField
     const DATA_TYPE_NUMERIC = self::DATA_TYPE_NUMBER;
     const DATA_TYPE_INTEGER = self::DATA_TYPE_NUMBER;
 
-    const DATA_TYPE_FLOAT = 7;
-
-    const DATA_TYPE_DECIMAL = self::DATA_TYPE_FLOAT;
-
-
-    //---- String Types
     const DATA_TYPE_STRING  = 5;
 
-    const DATA_TYPE_ALPHA_STRING = 16;
-    const DATA_TYPE_ALPHA_NUMERIC_STRING = 17;
+    const DATA_TYPE_FLOAT   = 7;
+    const DATA_TYPE_DECIMAL = self::DATA_TYPE_FLOAT;
 
-    const DATA_TYPE_FILE_PATH = 23;
-
-    const DATA_TYPE_HTML = 19;
-
-    const DATA_TYPE_HTML_NOTE = 20;
-
-    const DATA_TYPE_PASSWORD = 18;
-
+    const DATA_TYPE_TIME       = 8;
     const DATA_TYPE_EMAIL      = 9;
-    const DATA_TYPE_NUMERIC_STRING = 21;
     const DATA_TYPE_PHONE      = 10;
-    const DATA_TYPE_CREDIT_CARD = 11;
+    const DATA_TYPE_CREDITCARD = 11;
     const DATA_TYPE_SSN        = 12;
-
-    const DATA_TYPE_URL = 22;
-
     const DATA_TYPE_ARRAY      = 13;
 
 
@@ -67,8 +48,8 @@ class anvilModelField
     public $tableName;
     public $formName;
     public $fieldName;
-    protected $_fieldType = self::DATA_TYPE_STRING;
-    public $maxLength = 45;
+    public $fieldType = self::DATA_TYPE_STRING;
+    public $maxLength;
     public $decimalPlace;
     public $allowNull = true;
     public $readOnly = false;
@@ -79,17 +60,13 @@ class anvilModelField
     public $required = false;
     public $validationRegEx;
 
-    public $allowedCharacters;
-    public $stripTags = true;
-    public $allowedTags;
-
     public $activity = true;
 
     private $_regional;
 
     public function __construct(anvilModelAbstract $model, $name = '')
     {
-//                $this->model = $model;
+        //        $this->model = $model;
         $this->name      = $name;
         $this->tableName = $model->primaryTableName;
         $this->formName  = $model->formName;
@@ -121,10 +98,6 @@ class anvilModelField
                     $return = ucwords(implode(' ', preg_split('/([[:upper:]][[:lower:]]+)/', $this->name, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)));
 
                 }
-                break;
-
-            case 'fieldtype':
-                $return = $this->_fieldType;
                 break;
         }
 
@@ -210,96 +183,6 @@ class anvilModelField
                 $this->_displayName = $value;
                 break;
 
-            case 'fieldtype':
-                $this->_fieldType = $value;
-
-                switch ($this->_fieldType) {
-                    case self::DATA_TYPE_ALPHA_STRING:
-                        $this->allowedCharacters = 'A-Za-z _.,@!?&%$#^*~\[\]\{\}()+-';
-                        $this->maxLength = 45;
-                        break;
-
-                    case self::DATA_TYPE_ALPHA_NUMERIC_STRING:
-                        $this->allowedCharacters = 'A-Za-z0-9 _.,@!?&%$#^*~\[\]\{\}()+-';
-                        $this->maxLength = 45;
-                        break;
-
-                    case self::DATA_TYPE_BOOLEAN:
-                        $this->maxLength = 1;
-                        break;
-
-                    case self::DATA_TYPE_DATE:
-                    case self::DATA_TYPE_DATE_STRING:
-                        $this->allowedCharacters = '\.\/0-9 \-';
-                        $this->maxLength = 10;
-                        break;
-
-                    case self::DATA_TYPE_ADD_DTS:
-                    case self::DATA_TYPE_DTS:
-                    case self::DATA_TYPE_DTS_STRING:
-                        $this->allowedCharacters = '\.\/\:ampAMP0-9 \-';
-                        $this->maxLength = 22;
-                        break;
-
-                    case self::DATA_TYPE_EMAIL:
-                        $this->allowedCharacters = '_\.@\/\!\+a-zA-Z0-9\-';
-                        $this->maxLength = 80;
-                        break;
-
-                    case self::DATA_TYPE_HTML:
-                    case self::DATA_TYPE_HTML_NOTE:
-                        $this->stripTags = false;
-                        $this->maxLength = 0;
-                        break;
-
-                    case self::DATA_TYPE_DECIMAL:
-                    case self::DATA_TYPE_FLOAT:
-                        $this->allowedCharacters = '\.\$0-9\-';
-                        $this->maxLength = 15;
-                        break;
-
-                    case self::DATA_TYPE_FILE_PATH:
-                        $this->allowedCharacters = 'A-Za-z0-9 _.:@!?&%$#\[\]\\\\\/()+-';
-                        $this->maxLength = 128;
-                        break;
-
-                    case self::DATA_TYPE_INTEGER:
-                    case self::DATA_TYPE_NUMBER:
-                    case self::DATA_TYPE_NUMERIC:
-                        $this->allowedCharacters = '0-9\-';
-                        $this->maxLength = 15;
-                        break;
-
-                    case self::DATA_TYPE_NUMERIC_STRING:
-                        $this->allowedCharacters = '\.,0-9 ';
-                        $this->maxLength = 20;
-                        break;
-
-                    case self::DATA_TYPE_PASSWORD:
-                        $this->allowedCharacters = '_\.@\!\$#a-zA-Z0-9 \-';
-                        $this->maxLength = 32;
-                        break;
-
-                    case self::DATA_TYPE_PHONE:
-                        $this->allowedCharacters = '\.\(\)ext0-9 \-';
-                        $this->maxLength = 25;
-                        break;
-
-                    case self::DATA_TYPE_TIME:
-                        $this->allowedCharacters = '\:apmAPM0-9 ';
-                        $this->maxLength = 12;
-                        break;
-
-                    case self::DATA_TYPE_URL:
-                        $this->allowedCharacters = 'A-Za-z0-9 _.@!?&%$#\[\]\/()+-';
-                        $this->maxLength = 128;
-                        break;
-
-                }
-
-
-                break;
-
             default:
                 throw new Exception('Invalid property "' . $name . '"!');
         }
@@ -323,8 +206,6 @@ class anvilModelField
 
         $return = '';
 
-        $this->_value = $this->clean();
-
         switch ($this->fieldType) {
             case self::DATA_TYPE_BOOLEAN:
                 $return = $dataConnection->dbBoolean($this->_value);
@@ -347,7 +228,7 @@ class anvilModelField
                 break;
 
             case self::DATA_TYPE_DTS:
-                $value = isset($this->_value) && $this->_value != ''
+                $value = isset($this->_value) && $this->_value !== ''
                         ? $this->_value
                         : ($this->allowNull
                                 ? null
@@ -384,7 +265,7 @@ class anvilModelField
                 break;
 
             case self::DATA_TYPE_DTS_STRING:
-                $value = isset($this->_value) && $this->_value != ''
+                $value = isset($this->_value) && $this->_value !== ''
                     ? $this->_value
                     : ($this->allowNull
                         ? null
@@ -420,16 +301,7 @@ class anvilModelField
 
                 break;
 
-            case self::DATA_TYPE_ALPHA_STRING:
-            case self::DATA_TYPE_ALPHA_NUMERIC_STRING:
-            case self::DATA_TYPE_EMAIL:
-            case self::DATA_TYPE_FILE_PATH:
-            case self::DATA_TYPE_HTML:
-            case self::DATA_TYPE_HTML_NOTE:
-            case self::DATA_TYPE_NUMERIC_STRING:
-            case self::DATA_TYPE_PASSWORD:
             case self::DATA_TYPE_STRING:
-            case self::DATA_TYPE_URL:
 
                 $return = isset($this->_value)
                         ? $dataConnection->dbString($this->_value)
@@ -451,7 +323,7 @@ class anvilModelField
 
             case self::DATA_TYPE_DECIMAL:
             case self::DATA_TYPE_FLOAT:
-                $return = isset($this->_value) && $this->_value != ''
+                $return = isset($this->_value) && $this->_value !== ''
                         ? floatval(str_replace(',', '', $this->_value))
                         :
                         ($this->allowNull
@@ -464,30 +336,17 @@ class anvilModelField
             case self::DATA_TYPE_INTEGER:
             case self::DATA_TYPE_NUMBER:
 //                echo '<!-- ' . $this->name . ': this->_value = ' . $this->_value . ' -->' . PHP_EOL;
-//            echo '<!-- ' . $this->name . ': this->_value = ';
-
-//            if (isset($this->_value) && $this->_value != '') {
-//                echo '|' . $this->_value . '|';
-//            } else {
-//                echo '--empty--';
-//            }
-
-
 //            fb::log($this);
 
 //            if ($this->allowNull) {
 //                fb::log('Allows null.');
 //            }
 
-//            if ($this->allowNull) {
-//                echo ' (allows null)';
-//            }
-
 //            if (isset($this->_value) && $this->_value !== '') {
 //                fb::log('Value set.');
 //            }
 
-            $return = isset($this->_value) && $this->_value != ''
+            $return = isset($this->_value) && $this->_value !== ''
                         ? intval(str_replace(',', '', $this->_value))
                         : ($this->allowNull
                                 ? null
@@ -496,7 +355,6 @@ class anvilModelField
                                         : 0));
 
 //            fb::log($return, '$return');
-//            echo '; $return = ' . $return . ' -->' . PHP_EOL;
 
             break;
 
@@ -516,54 +374,6 @@ class anvilModelField
         if (is_null($return)) {
             $return = 'null';
         }
-
-        return $return;
-    }
-
-
-    public function clean()
-    {
-//        global $phpAnvil;
-
-        $encoding = 'UTF-8';
-
-        $return = $this->_value;
-
-//        $phpAnvil->application->logDebug($return, $this->tableName . '.' . $this->name . ' clean $return #1');
-
-        //---- Strip HTML Tags, Except for Allowed Tags ------------------------
-        //---- Anti-XSS
-
-        if ($this->stripTags) {
-            $return = strip_tags($return, $this->allowedTags);
-        }
-
-//        $phpAnvil->application->logDebug($return, $this->tableName . '.' . $this->name . ' clean $return #2');
-
-        //---- Convert HTML Special Characters and Quotes ----------------------
-        //---- Anti-XSS
-
-//        $return = htmlspecialchars($data, ENT_QUOTES | ENT_HTML401, $encoding);
-//        $return = htmlspecialchars($return, ENT_QUOTES, $encoding);
-
-
-        //---- Enforce Allowed Characters --------------------------------------
-        if (!empty($this->allowedCharacters)) {
-//            $phpAnvil->application->logDebug($this->allowedCharacters, $this->tableName . '.' . $this->name . ' clean allowedCharacters');
-            $return = preg_replace('/[^' . $this->allowedCharacters . ']/', '', $return);
-        }
-
-//        $phpAnvil->application->logDebug($return, $this->tableName . '.' . $this->name . ' clean $return #3');
-
-        //----- Enforce Maximum Length -----------------------------------------
-        if (intval($this->maxLength) > 0) {
-            $return = substr($return, 0, $this->maxLength);
-        }
-
-//        $phpAnvil->application->logDebug($return, $this->tableName . '.' . $this->name . ' clean FINAL $return');
-
-
-//        $this->_logDebug($return, 'cleaned');
 
         return $return;
     }

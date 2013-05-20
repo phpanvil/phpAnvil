@@ -229,45 +229,6 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
     }
 
 
-//    public function clean($data, $stripTags = true, $allowedTags = '')
-    public function clean(anvilModelField $field, $data)
-    {
-
-        $encoding = 'UTF-8';
-
-        $return = $data;
-
-        //---- Strip HTML Tags, Except for Allowed Tags ------------------------
-        //---- Anti-XSS
-
-        if ($field->stripTags) {
-            $return = strip_tags($return, $field->allowedTags);
-        }
-
-        //---- Convert HTML Special Characters and Quotes ----------------------
-        //---- Anti-XSS
-
-//        $return = htmlspecialchars($data, ENT_QUOTES | ENT_HTML401, $encoding);
-//        $return = htmlspecialchars($return, ENT_QUOTES, $encoding);
-
-
-        //---- Enforce Allowed Characters --------------------------------------
-        if (!empty($field->allowedCharacters)) {
-            $return = preg_replace('/[^' . $field->allowedCharacters . ']/', '', $return);
-        }
-
-        //----- Enforce Maximum Length -----------------------------------------
-        if (intval($field->maxLength) > 0) {
-            $return = substr($return, 0, $field->maxLength);
-        }
-
-
-        $this->_logDebug($return, 'cleaned');
-
-        return $return;
-    }
-
-
     public function delete($sql = '')
     {
         $primaryValue = $this->fields->field($this->primaryFieldName)->value;
@@ -358,18 +319,8 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
                 }
                 break;
 
-            case anvilModelField::DATA_TYPE_ALPHA_STRING:
-            case anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING:
-            case anvilModelField::DATA_TYPE_EMAIL:
-            case anvilModelField::DATA_TYPE_FILE_PATH:
-            case anvilModelField::DATA_TYPE_HTML:
-            case anvilModelField::DATA_TYPE_HTML_NOTE:
-            case anvilModelField::DATA_TYPE_NUMERIC_STRING:
-            case anvilModelField::DATA_TYPE_PASSWORD:
-            case anvilModelField::DATA_TYPE_PHONE:
             case anvilModelField::DATA_TYPE_STRING:
-            case anvilModelField::DATA_TYPE_URL:
-            $return = stripslashes($value);
+                $return = stripslashes($value);
                 break;
 
             case anvilModelField::DATA_TYPE_BOOLEAN:
@@ -513,9 +464,6 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
         $return = 0;
 
         if (is_array($fieldValues)) {
-
-            $this->_logDebug($fieldValues, '$fieldValues');
-
             foreach ($fieldValues as $name => $newValue)
             {
                 if ($this->fields->exists($name)) {
@@ -527,9 +475,6 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
 //                    }
 
                     $this->fields->field($name)->value = $newValue;
-                    $this->fields->field($name)->clean();
-
-//                    $this->fields->field($name)->value = $this->clean($this->fields->field($name), $newValue);
                 }
             }
         }
