@@ -8,6 +8,11 @@ abstract class anvilSiteAbstract extends anvilObjectAbstract
     const ENVIRONMENT_STAGING       = 2;
     const ENVIRONMENT_PRODUCTION    = 3;
 
+    public $environmentNameIndex = array(
+        'Development' => 1,
+        'Staging' => 2,
+        'Production' => 3
+    );
 
     public $configFilename;
     public $environment = self::ENVIRONMENT_DEVELOPMENT;
