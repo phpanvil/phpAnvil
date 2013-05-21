@@ -15,7 +15,11 @@ abstract class anvilSiteAbstract extends anvilObjectAbstract
     );
 
     public $configFilename;
+
     public $environment = self::ENVIRONMENT_DEVELOPMENT;
+    public $environmentName = 'Development';
+    public $environmentLabel;
+
     public $timeZone = 'UTC';
     public $path = SITE_PATH;
 
