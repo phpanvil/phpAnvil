@@ -1,6 +1,6 @@
 <?php
 
-define('SQL_TABLE_ACTIVITY_TYPE', SQL_TABLE_PREFIX . 'activity_type');
+define('SQL_TABLE_ACTIVITY_TYPE', 'st_activity.activity_type');
 
 require_once 'anvilRSModel.abstract.php';
 

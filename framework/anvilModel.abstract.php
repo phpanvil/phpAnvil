@@ -17,6 +17,8 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
 
 //    public $id = 0;
 
+    public $database;
+
     public $dataConnection;
 
     public $regional;
@@ -158,13 +160,27 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
     }
 
 
+    public function getTableName()
+    {
+        $return = '';
+
+        if ($this->database) {
+            $return .= $this->database . '.';
+        }
+
+        $return .= $this->primaryTableName;
+
+        return $return;
+    }
+
+
     protected function _buildSaveSQL($forceUpdateAll = false)
     {
         $dataFields = '';
         $sql = '';
 
         if ($this->isNew()) {
-            $sql = 'INSERT INTO ' . $this->primaryTableName . ' (';
+            $sql = 'INSERT INTO ' . $this->getTableName() . ' (';
 
 
             $count = $this->fields->count();
@@ -196,7 +212,7 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
             $sql .= ')';
 
         } elseif ($this->isChanged()) {
-            $sql = 'UPDATE ' . $this->primaryTableName . ' SET ';
+            $sql = 'UPDATE ' . $this->getTableName() . ' SET ';
 
             $count = $this->fields->count();
             for ($i = 0; $i < $count; $i++)
@@ -413,7 +429,7 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
                     $sql .= substr($dataFields, 2);
                 }
 
-                $sql .= ' FROM ' . $this->primaryTableName;
+                $sql .= ' FROM ' . $this->getTableName();
                 $sql .= ' WHERE ' . $this->primaryColumnName . '=' . intval($primaryValue);
             }
         }
