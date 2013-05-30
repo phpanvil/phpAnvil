@@ -44,7 +44,7 @@ class anvilPageNav extends anvilControlAbstract
 
     public $itemsPerPage = 25;
     public $itemOffset = 0;
-    public $webRootPath = '';
+    public $pagePath = '';
 
     public $imageNext = 'bPageNavNext.png';
     public $imagePrev = 'bPageNavPrev.png';
@@ -541,16 +541,20 @@ class anvilPageNav extends anvilControlAbstract
 
     public function getPagePath()
     {
-        $pagePath = $this->getBasePath();
-        $pagePath .= $_SERVER["REQUEST_URI"];
+        $return = $this->pagePath;
 
-//        $this->_logDebug($pagePath, '$pagePath 1');
+        if (empty($return)) {
+            $return = $this->getBasePath();
+            $return .= $_SERVER["REQUEST_URI"];
+
+//        $this->_logDebug($return, '$return 1');
 //        $this->_logDebug($this->qsPrefix . 'pg', 'QS');
-        
-        $pagePath = $this->removeQSVar($pagePath, $this->qsPrefix . 'pg');
-//        $this->_logDebug($pagePath, '$pagePath 2');
 
-        return $pagePath;
+            $return = $this->removeQSVar($return, $this->qsPrefix . 'pg');
+//        $this->_logDebug($return, '$return 2');
+        }
+
+        return $return;
     }
 
 }
