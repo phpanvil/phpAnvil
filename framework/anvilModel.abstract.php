@@ -65,7 +65,7 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
         $this->regional          = $phpAnvil->regional;
 
         if (empty($formName)) {
-            $this->formName = $this->primaryTableName;
+            $this->formName = str_replace('.', '-', $this->primaryTableName);
         } else {
             $this->formName = $formName;
         }
