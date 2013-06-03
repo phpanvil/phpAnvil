@@ -259,9 +259,51 @@ abstract class anvilObjectAbstract
         global $phpAnvil;
         global $logStartTime;
 
-        if (isset($phpAnvil) && is_object($phpAnvil) && $logLevel <= $this->logLevel && $this->isLogEnabled()) {
-            $backTrace = debug_backtrace();
+        $backTrace = debug_backtrace();
 
+//            $extendedTitle = '[' . $backTrace[2]['class'] . '->' . $backTrace[2]['function'] . ': Line ' . $backTrace[1]['line'] . '] ' . $title;
+        $extendedTitle = $backTrace[2]['class'] . '->' . $backTrace[2]['function'] . ' (' . $backTrace[1]['line'] . ') ' . $title;
+
+        if ($this->_logTime) {
+            $currentTime = microtime(true);
+            $elapsedTime = number_format(($currentTime - $logStartTime), 2, '.', '');
+//                $elapsedTime = $currentTime - $logStartTime;
+
+            $title = '[' . $elapsedTime . '] ' . $title;
+            $extendedTitle = '[' . $elapsedTime . '] ' . $extendedTitle;
+        }
+
+
+        //---- Output to the standard Apache PHP log system --------------------
+        if ($logLevel >= self::LOG_LEVEL_WARNING) {
+            switch ($logLevel) {
+                case self::LOG_LEVEL_WARNING:
+                    error_log('-- WARNING -------------------------------------------------------');
+
+                    break;
+
+                case self::LOG_LEVEL_ERROR:
+                    error_log('-- ERROR ---------------------------------------------------------');
+
+                    break;
+
+                case self::LOG_LEVEL_CRITICAL:
+
+                    error_log('-- CRITICAL ------------------------------------------------------');
+
+                    break;
+            }
+
+            if (!empty($extendedTitle)) {
+                error_log('-- ' . $extendedTitle);
+            }
+
+            error_log('-- ' . $detail);
+        }
+
+
+        //---- Process log through the phpAnvil log system ---------------------
+        if (isset($phpAnvil) && is_object($phpAnvil) && $logLevel <= $this->logLevel && $this->isLogEnabled()) {
             //---- Add to anvilFuseTrace ------------------------------------------
             if ($this->_isTraceDefined()) {
                 if (!empty($title)) {
@@ -272,17 +314,6 @@ abstract class anvilObjectAbstract
                 anvilFuseTrace::add($backTrace[1]['file'], $backTrace[2]['class'] . '::' . $backTrace[2]['function'], $backTrace[1]['line'], $traceInfo, $logLevel);
             }
 
-//            $extendedTitle = '[' . $backTrace[2]['class'] . '->' . $backTrace[2]['function'] . ': Line ' . $backTrace[1]['line'] . '] ' . $title;
-            $extendedTitle = $backTrace[2]['class'] . '->' . $backTrace[2]['function'] . ' (' . $backTrace[1]['line'] . ') ' . $title;
-
-            if ($this->_logTime) {
-                $currentTime = microtime(true);
-                $elapsedTime = number_format(($currentTime - $logStartTime), 2, '.', '');
-//                $elapsedTime = $currentTime - $logStartTime;
-
-                $title = '[' . $elapsedTime . '] ' . $title;
-                $extendedTitle = '[' . $elapsedTime . '] ' . $extendedTitle;
-            }
 
             //---- Output to FirePHP/FireBug -----------------------------------
             switch ($logLevel)

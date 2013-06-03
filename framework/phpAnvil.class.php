@@ -273,6 +273,9 @@ class phpAnvil2 extends anvilObjectAbstract
     }
 
 
+    /**
+     * @return bool
+     */
     function open()
     {
         $return = false;
