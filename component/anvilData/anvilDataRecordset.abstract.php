@@ -127,6 +127,7 @@ class anvilDataRecordsetAbstract extends anvilObjectAbstract
                 case anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING:
                 case anvilModelField::DATA_TYPE_EMAIL:
                 case anvilModelField::DATA_TYPE_FILE_PATH:
+                case anvilModelField::DATA_TYPE_BLOB:
                 case anvilModelField::DATA_TYPE_HTML:
                 case anvilModelField::DATA_TYPE_HTML_NOTE:
                 case anvilModelField::DATA_TYPE_NUMERIC_STRING:

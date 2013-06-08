@@ -53,6 +53,8 @@ class anvilModelField
 
     const DATA_TYPE_ARRAY      = 13;
 
+    const DATA_TYPE_BLOB = 24;
+
 
 //    public $model;
 
@@ -246,6 +248,8 @@ class anvilModelField
                         $this->maxLength = 80;
                         break;
 
+
+                    case self::DATA_TYPE_BLOB:
                     case self::DATA_TYPE_HTML:
                     case self::DATA_TYPE_HTML_NOTE:
                         $this->stripTags = false;
@@ -424,6 +428,7 @@ class anvilModelField
             case self::DATA_TYPE_ALPHA_NUMERIC_STRING:
             case self::DATA_TYPE_EMAIL:
             case self::DATA_TYPE_FILE_PATH:
+            case self::DATA_TYPE_BLOB:
             case self::DATA_TYPE_HTML:
             case self::DATA_TYPE_HTML_NOTE:
             case self::DATA_TYPE_NUMERIC_STRING:
