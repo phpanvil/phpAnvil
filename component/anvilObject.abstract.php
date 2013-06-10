@@ -275,7 +275,7 @@ abstract class anvilObjectAbstract
 
 
         //---- Output to the standard Apache PHP log system --------------------
-        if ($logLevel >= self::LOG_LEVEL_WARNING) {
+        if ($logLevel <= self::LOG_LEVEL_WARNING) {
             switch ($logLevel) {
                 case self::LOG_LEVEL_WARNING:
                     error_log('-- WARNING -------------------------------------------------------');
