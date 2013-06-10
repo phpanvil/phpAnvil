@@ -13,7 +13,9 @@ class anvilSession extends anvilDynamicObjectAbstract
 
 //	private $_cookieDetectionEnabled = false;
     private $_cookieDetected = false;
+
     private $_resetEnabled = false;
+
     private $_new = true;
 
     private $_timezoneDetectionEnabled = false;
@@ -24,33 +26,54 @@ class anvilSession extends anvilDynamicObjectAbstract
     public $dataConnection;
 
     private $_detectExecuted = false;
+
     private $_openExecuted = false;
+
     private $_abandonExecuted = false;
 
 
     public $id;
+
     public $phpSessionID;
+
     public $sessionDTS;
+
     public $lastVisitDTS;
+
     public $thisVisitDTS;
+
     public $requestedURL;
+
     public $userAgent;
+
     public $userIP;
+
     public $userID;
+
     public $referrer;
+
     public $innactiveTimeout = 1800;
+
     public $sessionLifespan = 7200;
+
     public $dataName = '$d474';
+
     public $sessionName = 'PHPANVIL_SESSION';
+
     public $cookieDomain = '/';
+
 //	public $testCookieName;
 //	public $testParameterName;
     public $sessionsTable = 'sessions';
+
     public $varsTable = 'session_vars';
+
     public $timezoneOffset = '';
+
     public $dateTimeZone;
 
     private $_isConsole = false;
+
 
     public function __construct($dataConnection = null)
     {
@@ -84,14 +107,16 @@ class anvilSession extends anvilDynamicObjectAbstract
         } else {
             //			$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, "Executing...");
             //            FB::info('Executing...');
-            $this->_logVerbose('Executing...');
+            $this->_logVerbose('Detecting Session...');
 
             $this->thisVisitDTS = date('Y-m-d H:i:s');
 
             #---- Detect User IP
             if ($this->_isConsole) {
                 $this->userIP = getHostByName(SITE_DOMAIN);
-            } else {
+            } elseif (isset($_SERVER["HTTP_X_CLUSTER_CLIENT_IP"])) {
+                $this->userIP = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+            } elseif (isset($_SERVER["REMOTE_ADDR"])) {
                 $this->userIP = $_SERVER['REMOTE_ADDR'];
             }
 
@@ -128,7 +153,7 @@ class anvilSession extends anvilDynamicObjectAbstract
                 //				$msg = 'anvilSession Cookie Detected';
                 //                $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, $msg);
                 //                FB::info($msg);
-                $this->_logVerbose('anvilSession Cookie Detected');
+                $this->_logVerbose('anvilSession Cookie Detected (' . $this->id . ')');
 
 
                 #---- Test Parameter Detection
@@ -228,7 +253,7 @@ class anvilSession extends anvilDynamicObjectAbstract
     public function open()
     {
         //		$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, "Executing...");
-        $this->_logVerbose('Executing...');
+        $this->_logVerbose('Opening Session...');
 
         ini_set('session.name', $this->sessionName);
         session_name($this->sessionName);
@@ -287,6 +312,16 @@ class anvilSession extends anvilDynamicObjectAbstract
         $this->_logVerbose('session_set_save_handler set');
 
 
+        $domain = isset($_SERVER['HTTP_HOST'])
+                ? (($_SERVER['HTTP_HOST'] != 'localhost')
+                        ? $_SERVER['HTTP_HOST']
+                        : false)
+                : false;
+
+//        session_set_cookie_params($this->sessionLifespan, '/', $domain, true, true);
+        session_set_cookie_params($this->sessionLifespan, null, $domain, true, true);
+
+
         session_start();
 
         //			$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Session #' . $this->id . ' (' . $this->phpSessionID . ') Started');
@@ -301,8 +336,7 @@ class anvilSession extends anvilDynamicObjectAbstract
         if ($this->isCookieDetected() && $this->_timezoneDetectionEnabled) {
             //---- Get non-phpAnvil Querystring ----------------------------
             $queryString = '';
-            foreach ($_GET as $param => $value)
-            {
+            foreach ($_GET as $param => $value) {
                 switch ($param) {
                     case 'm':
                     case 'a':
@@ -370,7 +404,7 @@ class anvilSession extends anvilDynamicObjectAbstract
             } elseif (empty($this->timezoneOffset)) {
                 //                } elseif ($this->timezoneOffset == '') {
                 $_SESSION['requestURI'] = $_SERVER["REQUEST_URI"];
-                $redirectURL            = 'http://' . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+                $redirectURL = 'http://' . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 
                 if (empty($queryString)) {
                     $redirectURL .= '?';
@@ -411,7 +445,7 @@ class anvilSession extends anvilDynamicObjectAbstract
         if ($objRS->hasRows()) {
             $objRS->read();
             $this->userID = $userID;
-            $this->id     = $objRS->data('session_id');
+            $this->id = $objRS->data('session_id');
             $this->executeRead($objRS->data('ascii_session_id'));
             $return = true;
             //			$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Session #' . $this->id . ' Found!');
@@ -446,6 +480,7 @@ class anvilSession extends anvilDynamicObjectAbstract
             $sql = 'UPDATE ' . $this->sessionsTable . ' SET ';
             $sql .= 'last_visit_dts=NOW()';
             $sql .= ' WHERE session_id=' . $this->id;
+
             //			$sql .= ' WHERE session_id=' . $this->dataConnection->dbString($this->id);
             return $this->dataConnection->execute($sql);
         } else {
@@ -628,7 +663,7 @@ class anvilSession extends anvilDynamicObjectAbstract
      */
     public function executeClose()
     {
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, "Executing...");
+//        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, "Executing...");
 
         //echo('<br>** anvilSession.CloseCallback () **<br>');
 
@@ -678,7 +713,7 @@ class anvilSession extends anvilDynamicObjectAbstract
             $objRS = $this->dataConnection->execute($sql);
             if ($objRS->read()) {
                 //				$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Session found.');
-                $this->_logVerbose('Session found.');
+                $this->_logVerbose('Session #' . $objRS->data('session_id') . ' (' . $objRS->data('ascii_session_id') . ') found.');
 
                 //				$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Is New? = ' . $this->isNew(), self::TRACE_TYPE_DEBUG);
                 //				$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Innactive Timeout = ' . $this->innactiveTimeout . 's', self::TRACE_TYPE_DEBUG);
@@ -687,7 +722,7 @@ class anvilSession extends anvilDynamicObjectAbstract
                 $this->userID = $objRS->data('user_id');
 
                 if ($objRS->data('time_diff') <= $this->innactiveTimeout) {
-                    $this->id         = $objRS->data('session_id');
+                    $this->id = $objRS->data('session_id');
                     $this->sessionDTS = $objRS->data('session_dts');
                     //				$this->phpSessionID = $objRS->data('ascii_session_id');
                     //					$this->userIP = $objRS->data('user_ip');
@@ -696,7 +731,7 @@ class anvilSession extends anvilDynamicObjectAbstract
                 } else {
                     //					$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Session Timed Out - Starting New Session...'); //, DevTrace::TYPE_WARNING);
                     $this->_logVerbose('Session Timed Out - Starting New Session...');
-                    $this->id     = 0;
+                    $this->id = 0;
                     $this->userID = 0;
                 }
             } else {
@@ -706,7 +741,7 @@ class anvilSession extends anvilDynamicObjectAbstract
                 //				$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Innactive Timeout = ' . $this->innactiveTimeout . 's', self::TRACE_TYPE_DEBUG);
                 //				$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Time Diff = ' . $objRS->data('time_diff') . 's', self::TRACE_TYPE_DEBUG);
 
-                $this->id     = 0;
+                $this->id = 0;
                 $this->userID = 0;
             }
             $this->save();
@@ -877,10 +912,10 @@ class anvilSession extends anvilDynamicObjectAbstract
         $isOk = $this->dataConnection->execute($sql);
 
         if ($this->id == 0) {
-            $sql   = "SELECT LAST_INSERT_ID() AS id, Now() AS nowDTS;";
+            $sql = "SELECT LAST_INSERT_ID() AS id, Now() AS nowDTS;";
             $objRS = $this->dataConnection->execute($sql);
             if ($objRS->read()) {
-                $this->id           = $objRS->data('id');
+                $this->id = $objRS->data('id');
                 $this->lastVisitDTS = $objRS->data('nowDTS');
                 $this->thisVisitDTS = $objRS->data('nowDTS');
             }
@@ -905,6 +940,7 @@ class anvilSession extends anvilDynamicObjectAbstract
         }
 
         $this->dataConnection->execute($sql);
+
         return true;
     }
 
@@ -930,10 +966,10 @@ class anvilSession extends anvilDynamicObjectAbstract
 
         //		$this->_cookieDetectionEnabled = false;
         $this->_timezoneDetectionEnabled = false;
-        $this->_abandonExecuted          = true;
-        $this->_detectExecuted           = false;
-        $this->id                        = 0;
-        $this->_new                      = true;
+        $this->_abandonExecuted = true;
+        $this->_detectExecuted = false;
+        $this->id = 0;
+        $this->_new = true;
     }
 
 
@@ -988,6 +1024,7 @@ class anvilSession extends anvilDynamicObjectAbstract
 
             $return = $this->dataConnection->execute($sql);
         }
+
         return $return;
 
     }

@@ -123,8 +123,17 @@ class anvilDataRecordsetAbstract extends anvilObjectAbstract
                     }
                     break;
 
+                case anvilModelField::DATA_TYPE_ALPHA_STRING:
+                case anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING:
+                case anvilModelField::DATA_TYPE_EMAIL:
+                case anvilModelField::DATA_TYPE_FILE_PATH:
+                case anvilModelField::DATA_TYPE_HTML:
+                case anvilModelField::DATA_TYPE_HTML_NOTE:
+                case anvilModelField::DATA_TYPE_NUMERIC_STRING:
+                case anvilModelField::DATA_TYPE_PASSWORD:
                 case anvilModelField::DATA_TYPE_PHONE:
                 case anvilModelField::DATA_TYPE_STRING:
+                case anvilModelField::DATA_TYPE_URL:
 //                    if ($column == 'detail') {
 //                        $this->_logDebug($value, '$value');
 //                    }

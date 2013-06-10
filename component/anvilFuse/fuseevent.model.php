@@ -38,24 +38,35 @@ class FuseEventModel extends anvilRSModelAbstract
         $this->fields->fuseApplicationID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->version->fieldName = 'version';
+        $this->fields->version->fieldType = anvilModelField::DATA_TYPE_NUMERIC_STRING;
+        $this->fields->version->maxLength = 10;
 
         $this->fields->userIP->fieldName = 'user_ip';
+        $this->fields->userIP->fieldType = anvilModelField::DATA_TYPE_NUMERIC_STRING;
+        $this->fields->userIP->maxLength = 20;
 
         $this->fields->userID->fieldName = 'user_id';
         $this->fields->userID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->name->fieldName = 'name';
+        $this->fields->name->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
+        $this->fields->name->maxLength = 255;
 
         $this->fields->number->fieldName = 'number';
         $this->fields->number->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->details->fieldName = 'details';
+        $this->fields->details->fieldType = anvilModelField::DATA_TYPE_HTML;
+
         $this->fields->file->fieldName = 'file';
+        $this->fields->file->fieldType = anvilModelField::DATA_TYPE_FILE_PATH;
+        $this->fields->file->maxLength = 128;
 
         $this->fields->line->fieldName = 'line';
         $this->fields->line->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->trace->fieldName = 'trace';
+        $this->fields->trace->fieldType = anvilModelField::DATA_TYPE_HTML;
 
         $this->id = $id;
     }
