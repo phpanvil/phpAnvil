@@ -295,7 +295,7 @@ class anvilModelField
                         break;
 
                     case self::DATA_TYPE_URL:
-                        $this->allowedCharacters = 'A-Za-z0-9 _.@!?&%$#\[\]\/()+-';
+                        $this->allowedCharacters = 'A-Za-z0-9 _.@!?&%$#\[\]\/()+-:';
                         $this->maxLength = 128;
                         break;
 
