@@ -176,7 +176,7 @@ class anvilFuseTrap extends anvilDynamicObjectAbstract
 
     public function executeErrorHandler($type, $message, $file, $line)
     {
-        global $firePHP;
+//        global $firePHP;
 
         //if (TRACE) anvilFuseTrap::addTraceInfo(__FILE__, __METHOD__, __LINE__, "parameters = ($errNo, $errFile, $errLine)");
         //		$this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Executing...');

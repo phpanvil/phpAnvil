@@ -137,6 +137,7 @@ class anvilDataRecordsetAbstract extends anvilObjectAbstract
 
                     break;
 
+                case anvilModelField::DATA_TYPE_BLOB:
                 case anvilModelField::DATA_TYPE_BOOLEAN:
                 case anvilModelField::DATA_TYPE_DECIMAL:
                 case anvilModelField::DATA_TYPE_FLOAT:

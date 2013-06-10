@@ -34,6 +34,8 @@ class anvilModelField
     const DATA_TYPE_SSN        = 12;
     const DATA_TYPE_ARRAY      = 13;
 
+    const DATA_TYPE_BLOB = 24;
+
 
 //    public $model;
 
@@ -183,6 +185,101 @@ class anvilModelField
                 $this->_displayName = $value;
                 break;
 
+<<<<<<< HEAD
+=======
+            case 'fieldtype':
+                $this->_fieldType = $value;
+
+                switch ($this->_fieldType) {
+                    case self::DATA_TYPE_ALPHA_STRING:
+                        $this->allowedCharacters = 'A-Za-z _.,@!?&%$#^*~\[\]\{\}()+-';
+                        $this->maxLength = 45;
+                        break;
+
+                    case self::DATA_TYPE_ALPHA_NUMERIC_STRING:
+                        $this->allowedCharacters = 'A-Za-z0-9 _.,@!?&%$#^*~\[\]\{\}()+-';
+                        $this->maxLength = 45;
+                        break;
+
+                    case self::DATA_TYPE_BOOLEAN:
+                        $this->maxLength = 1;
+                        break;
+
+                    case self::DATA_TYPE_DATE:
+                    case self::DATA_TYPE_DATE_STRING:
+                        $this->allowedCharacters = '\.\/0-9 \-';
+                        $this->maxLength = 10;
+                        break;
+
+                    case self::DATA_TYPE_ADD_DTS:
+                    case self::DATA_TYPE_DTS:
+                    case self::DATA_TYPE_DTS_STRING:
+                        $this->allowedCharacters = '\.\/\:ampAMP0-9 \-';
+                        $this->maxLength = 22;
+                        break;
+
+                    case self::DATA_TYPE_EMAIL:
+                        $this->allowedCharacters = '_\.@\/\!\+a-zA-Z0-9\-';
+                        $this->maxLength = 80;
+                        break;
+
+
+                    case self::DATA_TYPE_BLOB:
+                    case self::DATA_TYPE_HTML:
+                    case self::DATA_TYPE_HTML_NOTE:
+                        $this->stripTags = false;
+                        $this->maxLength = 0;
+                        break;
+
+                    case self::DATA_TYPE_DECIMAL:
+                    case self::DATA_TYPE_FLOAT:
+                        $this->allowedCharacters = '\.\$0-9\-';
+                        $this->maxLength = 15;
+                        break;
+
+                    case self::DATA_TYPE_FILE_PATH:
+                        $this->allowedCharacters = 'A-Za-z0-9 _.:@!?&%$#\[\]\\\\\/()+-';
+                        $this->maxLength = 128;
+                        break;
+
+                    case self::DATA_TYPE_INTEGER:
+                    case self::DATA_TYPE_NUMBER:
+                    case self::DATA_TYPE_NUMERIC:
+                        $this->allowedCharacters = '0-9\-';
+                        $this->maxLength = 15;
+                        break;
+
+                    case self::DATA_TYPE_NUMERIC_STRING:
+                        $this->allowedCharacters = '\.,0-9 ';
+                        $this->maxLength = 20;
+                        break;
+
+                    case self::DATA_TYPE_PASSWORD:
+                        $this->allowedCharacters = '_\.@\!\$#a-zA-Z0-9 \-';
+                        $this->maxLength = 32;
+                        break;
+
+                    case self::DATA_TYPE_PHONE:
+                        $this->allowedCharacters = '\.\(\)ext0-9 \-';
+                        $this->maxLength = 25;
+                        break;
+
+                    case self::DATA_TYPE_TIME:
+                        $this->allowedCharacters = '\:apmAPM0-9 ';
+                        $this->maxLength = 12;
+                        break;
+
+                    case self::DATA_TYPE_URL:
+                        $this->allowedCharacters = 'A-Za-z0-9 _.@!?&%$#\[\]\/()+-';
+                        $this->maxLength = 128;
+                        break;
+
+                }
+
+
+                break;
+
+>>>>>>> origin/dev
             default:
                 throw new Exception('Invalid property "' . $name . '"!');
         }
@@ -301,6 +398,18 @@ class anvilModelField
 
                 break;
 
+<<<<<<< HEAD
+=======
+            case self::DATA_TYPE_ALPHA_STRING:
+            case self::DATA_TYPE_ALPHA_NUMERIC_STRING:
+            case self::DATA_TYPE_EMAIL:
+            case self::DATA_TYPE_FILE_PATH:
+            case self::DATA_TYPE_BLOB:
+            case self::DATA_TYPE_HTML:
+            case self::DATA_TYPE_HTML_NOTE:
+            case self::DATA_TYPE_NUMERIC_STRING:
+            case self::DATA_TYPE_PASSWORD:
+>>>>>>> origin/dev
             case self::DATA_TYPE_STRING:
 
                 $return = isset($this->_value)

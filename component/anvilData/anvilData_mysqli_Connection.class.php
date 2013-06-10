@@ -11,14 +11,13 @@
  */
 
 require_once('anvilDataConnection.abstract.php');
-require_once('anvilDataConnection.interface.php');
 
 /**
  * MySQLi Data Connection
  *
  * @property MySQLi $_connection
  */
-class anvilData_mysqli_Connection extends anvilDataConnectionAbstract implements anvilDataConnectionInterface
+class anvilData_mysqli_Connection extends anvilDataConnectionAbstract
 {
     const VERSION = '2.0';
 
@@ -224,8 +223,9 @@ class anvilData_mysqli_Connection extends anvilDataConnectionAbstract implements
 
             $this->_connection = new mysqli($this->server, $this->username, $this->password, $this->database, $this->port);
 
-            if ($this->_connection->connect_error) {
-                $this->_logError('(' . $this->_connection->connect_errno . ') ' . $this->_connection->connect_error, 'MySQL Connection Error');
+//            if ($this->_connection->connect_error) {
+            if ($this->_connection->connect_errno) {
+                    $this->_logError('(' . $this->_connection->connect_errno . ') ' . $this->_connection->connect_error, 'MySQL Connection Error');
                 $return = false;
             }
         }
@@ -236,7 +236,7 @@ class anvilData_mysqli_Connection extends anvilDataConnectionAbstract implements
 
     public function dbString($value)
     {
-        $return = "null";
+        $return = 'null';
 
         if ($value && $this->isConnected()) {
             $return = "'" . $this->_connection->real_escape_string($value) . "'";

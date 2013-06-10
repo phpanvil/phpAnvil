@@ -8,9 +8,10 @@ abstract class anvilSiteAbstract extends anvilObjectAbstract
     const ENVIRONMENT_STAGING       = 2;
     const ENVIRONMENT_PRODUCTION    = 3;
 
-
     public $configFilename;
-    public $environment = self::ENVIRONMENT_DEVELOPMENT;
+
+    public $environment = array();
+
     public $timeZone = 'UTC';
     public $path = SITE_PATH;
 
@@ -22,22 +23,7 @@ abstract class anvilSiteAbstract extends anvilObjectAbstract
 	function __construct()
     {
 
-        //---- Unset defined properties before defining virtual versions
-        //---- of the properties
-//        unset($this->configFilename);
-//        unset($this->environment);
-//        unset($this->timeZone);
-//        unset($this->path);
-//        unset($this->webPath);
-
-
-        //---- Define virtual properties.
-//        $this->addProperty('configFilename', 'site.config.php');
-//        $this->addProperty('environment', self::ENVIRONMENT_DEVELOPMENT);
-//        $this->addProperty('timeZone', 'America/Los_Angeles');
-//
-//        $this->addProperty('path', SITE_PATH);
-//        $this->addProperty('webPath', '.');
+        $this->environment['type'] = self::ENVIRONMENT_DEVELOPMENT;
 
 		return true;
 	}

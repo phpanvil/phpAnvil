@@ -12,6 +12,8 @@
 
 require_once PHPANVIL2_COMPONENT_PATH . 'anvilObject.abstract.php';
 
+require_once('anvilDataConnection.interface.php');
+
 
 /**
  * anvilData Base Connection Abstract Class
@@ -22,7 +24,7 @@ require_once PHPANVIL2_COMPONENT_PATH . 'anvilObject.abstract.php';
  * @copyright       Copyright (c) 2010 Nick Slevkoff (http://www.slevkoff.com)
  * @ingroup         phpAnvilTools anvilData
  */
-abstract class anvilDataConnectionAbstract extends anvilObjectAbstract
+abstract class anvilDataConnectionAbstract extends anvilObjectAbstract implements anvilDataConnectionInterface
 {
     public $_connection;
 
