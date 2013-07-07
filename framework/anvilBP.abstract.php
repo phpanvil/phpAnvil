@@ -73,6 +73,10 @@ abstract class anvilBPAbstract extends anvilObjectAbstract
     {
         global $phpAnvil;
 
+        if ($fromTask && isset($this->_task)) {
+            $this->_task->output($text, $eol);
+        }
+
         if (isset($this->_batch)) {
             if (!empty($this->_savedOutput)) {
                 $this->_batch->output .= $this->_savedOutput;
@@ -81,13 +85,14 @@ abstract class anvilBPAbstract extends anvilObjectAbstract
 
             $this->_batch->output($text, $eol);
 
-            if ($fromTask && isset($this->_task)) {
-                $this->_task->output($text, $eol);
-            }
         } else {
             $this->_savedOutput .= $text;
 
-            echo $text;
+            if (!$phpAnvil->isCLI) {
+                echo str_replace(PHP_EOL, '<br>', $text);
+            } else {
+                echo $text;
+            }
 
             if ($eol) {
                 if (!$phpAnvil->isCLI) {
@@ -133,6 +138,10 @@ abstract class anvilBPAbstract extends anvilObjectAbstract
     function close()
     {
         $return = true;
+
+        if (isset($this->_task)) {
+            $this->_task->save();
+        }
 
         return $return;
     }
