@@ -285,8 +285,10 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
     {
         global $phpAnvil;
 
-        $domain = ($_SERVER['HTTP_HOST'] != 'localhost')
-                ? $_SERVER['HTTP_HOST']
+        $domain = isset($_SERVER['HTTP_HOST'])
+                ? (($_SERVER['HTTP_HOST'] != 'localhost')
+                        ? $_SERVER['HTTP_HOST']
+                        : false)
                 : false;
 
         setcookie($phpAnvil->application->cookieUserID, '', time() - 3600, '/', $domain, true, true);
