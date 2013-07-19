@@ -289,9 +289,12 @@ class phpAnvil2 extends anvilObjectAbstract
         //---- Start Session
         $this->_logVerbose('Starting session...');
         $this->session->dataConnection = $this->db;
+//        $this->session->enableLog();
         //        $this->session->enableTrace();
         //        $this->session->innactiveTimeout = 60 * 60;
+
         $this->session->open();
+//        $this->_logVerbose('...opened');
 
         $this->regional->timezoneOffset = $this->session->timezoneOffset;
 
@@ -889,7 +892,7 @@ class phpAnvil2 extends anvilObjectAbstract
 
         //        $this->_logDebug('session closed');
 
-        sendDebugTrace();
+//        sendDebugTrace();
         //		$this->db->close();
 
     }
