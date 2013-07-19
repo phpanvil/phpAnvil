@@ -130,8 +130,12 @@ class anvilData_mysqli_Connection extends anvilDataConnectionAbstract
 
             $return = $this->_connection->query($sql);
 
-            if ($return) {
-                $return = new anvilData_mysqli_Recordset($sql, $return, $this);
+            if ($return && $return !== true) {
+//                $returnName = get_class($return);
+
+//                if ($returnName && $returnName == 'mysqli_result') {
+                    $return = new anvilData_mysqli_Recordset($sql, $return, $this);
+//                }
             }
         }
 
