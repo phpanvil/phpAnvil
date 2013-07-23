@@ -162,6 +162,8 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
             $email = $_POST['email'];
         }
 
+        $email = strtolower($email);
+
         $return = filter_var($email, FILTER_VALIDATE_EMAIL);
 
         if ($return) {
@@ -348,6 +350,9 @@ abstract class anvilUserModelAbstract extends anvilRSModelAbstract
 
             $this->token = $token;
         }
+
+        //---- Force email to All Lowercase
+        $this->email = strtolower($this->email);
 
         //---- Save the Record
         $return = parent::save($sql, $id_sql);
