@@ -280,7 +280,7 @@ class anvilModelField
                         break;
 
                     case self::DATA_TYPE_PASSWORD:
-                        $this->allowedCharacters = '_\.@\!\$#a-zA-Z0-9 \-';
+                        $this->allowedCharacters = '_\.\!@#\$%^&*?a-zA-Z0-9 \-';
                         $this->maxLength = 32;
                         break;
 
