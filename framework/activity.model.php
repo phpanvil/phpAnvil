@@ -46,6 +46,8 @@ class ActivityModel extends anvilRSModelAbstract
         $this->fields->targetTableID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->targetTableName->fieldName = 'target_table_name';
+        $this->fields->targetTableName->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
+        $this->fields->targetTableName->maxLength = 45;
 
         $this->fields->targetID->fieldName = 'target_id';
         $this->fields->targetID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
@@ -54,7 +56,11 @@ class ActivityModel extends anvilRSModelAbstract
         $this->fields->activityTypeID->fieldType = anvilModelField::DATA_TYPE_INTEGER;
 
         $this->fields->description->fieldName = 'description';
+        $this->fields->description->fieldType = anvilModelField::DATA_TYPE_ALPHA_NUMERIC_STRING;
+        $this->fields->description->maxLength = 255;
+
         $this->fields->detail->fieldName = 'detail';
+        $this->fields->detail->fieldType = anvilModelField::DATA_TYPE_HTML;
 
         $this->id = $id;
     }
