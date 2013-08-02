@@ -88,7 +88,7 @@ class anvilGrid extends anvilControlAbstract
 
     private $_dataEngine;
 
-//    public $rowRenderBeginCallback;
+    public $rowRenderBeginCallback;
 //    public $rowRenderEndCallback;
 
     public $rowClass;
@@ -649,11 +649,11 @@ class anvilGrid extends anvilControlAbstract
 
 
                 #---- Execute Row Begin Callback
-                //                $this->executeCallback('rowRenderBegin', $this);
+//                                $this->executeCallback('rowRenderBegin', $this);
 
-                //                    if (!empty($this->rowRenderBeginCallback)) {
-                //                        call_user_func($this->rowRenderBeginCallback, $this);
-                //                    }
+                                    if (isset($this->rowRenderBeginCallback)) {
+                                        call_user_func($this->rowRenderBeginCallback, $this);
+                                    }
 
 
 
@@ -1014,8 +1014,8 @@ class anvilGrid extends anvilControlAbstract
     public function onRowRenderBegin($callback)
     {
         //        $this->addCallback('onRowRenderBegin', $callback);
-        $this->addCallback('rowRenderBegin', $callback);
-        //        $this->_rowRenderBeginCallback = $callback;
+//        $this->addCallback('rowRenderBegin', $callback);
+                $this->rowRenderBeginCallback = $callback;
     }
 
 
