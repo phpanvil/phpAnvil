@@ -136,6 +136,10 @@ class anvilLink extends anvilControlAbstract
 
         $render .= '"';
 
+        if ($this->style) {
+            $render .= ' style="' . $this->style . '"';
+        }
+
         if ($this->dataPlacement) {
             $render .= ' data-placement="' . $this->dataPlacement . '"';
         }

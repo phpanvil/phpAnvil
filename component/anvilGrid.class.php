@@ -62,6 +62,8 @@ class anvilGrid extends anvilControlAbstract
     public $defaultOrderBy;
     public $defaultOrderByDesc = false;
 
+    public $subOrderBy;
+
     public $useDIV = true;
 
     public $htmlID = 'anvilGrid';
@@ -88,7 +90,7 @@ class anvilGrid extends anvilControlAbstract
 
     private $_dataEngine;
 
-//    public $rowRenderBeginCallback;
+    public $rowRenderBeginCallback;
 //    public $rowRenderEndCallback;
 
     public $rowClass;
@@ -160,7 +162,7 @@ class anvilGrid extends anvilControlAbstract
 
         parent::__construct($id, $properties, $traceEnabled);
 
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, '... done (' . date('h:i:s A') . ')');
+        $this->_logVerbose('... done (' . date('h:i:s A') . ')');
     }
 
 
@@ -235,7 +237,7 @@ class anvilGrid extends anvilControlAbstract
 
     public function getBasePath()
     {
-        $path = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on')
+        $path = ((isset($_SERVER["USING_HTTPS"]) && $_SERVER["USING_HTTPS"]) || (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on'))
                 ? 'https://'
                 : 'http://';
         $path .= $_SERVER["SERVER_NAME"];
@@ -271,7 +273,7 @@ class anvilGrid extends anvilControlAbstract
 
         $html      = '';
         $startTime = microtime(true);
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Executing...');
+        $this->_logVerbose('Executing...');
 
         if (isset($this->anvilPageNav)) {
             $this->rowOffset = $this->anvilPageNav->itemOffset;
@@ -298,7 +300,7 @@ class anvilGrid extends anvilControlAbstract
 
 
         //---- Auto-Detect anvilGrid Variables ------------------------------------
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Auto-Detecting anvilGrid QueryString Variables...');
+        $this->_logVerbose('Auto-Detecting anvilGrid QueryString Variables...');
         $queryString = $this->baseQueryString;
 
         //        fb::Log($queryString, '$queryString');
@@ -335,7 +337,7 @@ class anvilGrid extends anvilControlAbstract
         //        fb::Log($queryString, '$queryString');
 
         //----- Build URL Strings ----------------------------------------------
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Building URL Strings...');
+        $this->_logVerbose('Building URL Strings...');
 
         //        $this->pagePath = $phpAnvil->site->webPath . ltrim($_SERVER['REDIRECT_URL'], '/');
         //        $this->_logDebug($this->pagePath, 'pagePath');
@@ -371,6 +373,12 @@ class anvilGrid extends anvilControlAbstract
         $sql = $this->baseSQL;
         if (!empty($orderBy)) {
             $sql .= ' ORDER BY ' . $orderBy . $orderByDirection;
+
+            if (!empty($this->subOrderBy)) {
+                $sql .= ', ' . $this->subOrderBy;
+            }
+        } elseif (!empty($this->subOrderBy)) {
+            $sql .= ' ORDER BY ' . $this->subOrderBy;
         }
 
         if ($this->_dataEngine == 'mysql' || $this->_dataEngine == 'mysqli') {
@@ -649,11 +657,11 @@ class anvilGrid extends anvilControlAbstract
 
 
                 #---- Execute Row Begin Callback
-                //                $this->executeCallback('rowRenderBegin', $this);
+//                                $this->executeCallback('rowRenderBegin', $this);
 
-                //                    if (!empty($this->rowRenderBeginCallback)) {
-                //                        call_user_func($this->rowRenderBeginCallback, $this);
-                //                    }
+                                    if (isset($this->rowRenderBeginCallback)) {
+                                        call_user_func($this->rowRenderBeginCallback, $this);
+                                    }
 
 
 
@@ -959,7 +967,7 @@ class anvilGrid extends anvilControlAbstract
         $currentTime = microtime(true);
         $elapsedTime = number_format(($currentTime - $startTime) * 100, 2);
 
-        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, '... done (' . $elapsedTime . ' ms)');
+        $this->_logVerbose('... done (' . $elapsedTime . ' ms)');
 
         return $html;
 
@@ -1014,8 +1022,8 @@ class anvilGrid extends anvilControlAbstract
     public function onRowRenderBegin($callback)
     {
         //        $this->addCallback('onRowRenderBegin', $callback);
-        $this->addCallback('rowRenderBegin', $callback);
-        //        $this->_rowRenderBeginCallback = $callback;
+//        $this->addCallback('rowRenderBegin', $callback);
+                $this->rowRenderBeginCallback = $callback;
     }
 
 
