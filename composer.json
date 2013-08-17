@@ -1,0 +1,29 @@
+{
+    "name"             : "phpanvil/phpanvil",
+    "description"      : "phpAnvil Framework",
+    "license"          : "MIT",
+    "type"             : "library",
+    "authors"          : [
+        {
+            "name" : "Nick Slevkoff",
+            "email": "nick@phpanvil.com"
+        }
+    ],
+    "autoload"         : {
+        "psr-0": {
+            "phpAnvil\\": "src/"
+        }
+    },
+    "require"          : {
+        "php": ">=5.5.0"
+    },
+    "require-dev"      : {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "extra"            : {
+        "branch-alias": {
+            "dev-master": "3.0-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,2 +1,2 @@
-phpAnvil v2.0 - PHP Application Framework
+phpAnvil Framework v3.0
 ----
