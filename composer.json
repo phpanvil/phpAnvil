@@ -1,8 +1,10 @@
 {
     "name"             : "phpanvil/phpanvil",
     "description"      : "phpAnvil Framework",
+    "homepage"         : "http://phpanvil.com",
     "license"          : "MIT",
     "type"             : "library",
+    "keywords"         : ["phpAnvil", "framework"],
     "authors"          : [
         {
             "name" : "Nick Slevkoff",
