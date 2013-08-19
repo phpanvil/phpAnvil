@@ -19,7 +19,7 @@
 
     <filter>
         <whitelist>
-            <directory>./src/phpAnvil/</directory>
+            <directory suffix=".php">./src/phpAnvil/</directory>
         </whitelist>
     </filter>
 </phpunit>
