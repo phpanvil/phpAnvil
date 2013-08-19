@@ -25,6 +25,12 @@ Most of our standards are based on the work from the
 - [PSR-3][5]: Logger Interface
 
 
+API Documentation
+-----------------
+
+[phpAnvil API Documentation][12] is generated using [phpDox][10].
+
+
 3rd Party Services/Utilities
 ----------------------------
 
@@ -50,3 +56,4 @@ cycle:
 [9]: https://packagist.org/packages/phpanvil/phpanvil
 [10]: http://phpdox.de/
 [11]: https://travis-ci.org
+[12]: https://apidoc.phpanvil.com/
