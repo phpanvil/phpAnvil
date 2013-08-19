@@ -1,5 +1,14 @@
 <?php
 
-define('VENDOR_PATH', realpath(__DIR__ . '/../../..'));
+use phpAnvil\Component\Loader\AutoLoader;
 
-require_once VENDOR_PATH . '/autoload.php';
+//---- Force the displaying of all errors
+ini_set('display_errors', '1');
+
+require_once realpath(__DIR__ . '/..') . '/src/phpAnvil/Component/Loader/AutoLoader.php';
+
+$anvilLoader = new AutoLoader();
+$anvilLoader->addNamespace('phpAnvil', realpath(__DIR__ . '/..') . '/src/phpAnvil');
+$anvilLoader->open();
+
+echo '<br>END OF LINE.';
