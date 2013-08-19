@@ -1,7 +1,7 @@
 phpAnvil Framework v3.0
 =======================
 
-[![Latest Stable Version](https://poser.pugx.org/phpanvil/phpanvil/v/stable.png)](https://packagist.org/packages/phpanvil/phpanvil)
+[![Latest Stable Version](https://poser.pugx.org/phpanvil/phpanvil/v/stable.png)](https://packagist.org/packages/phpanvil/phpanvil) [![Build Status](https://travis-ci.org/phpanvil/phpAnvil.png?branch=master)](https://travis-ci.org/phpanvil/phpAnvil)
 
 While most other frameworks focus on websites and simple applications, the
 phpAnvil framework was designed for SaaS and enterprise level web applications.
