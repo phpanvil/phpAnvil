@@ -1,6 +1,6 @@
 <?php
 
-namespace phpAnvil\Core;
+namespace phpAnvil\Component\Loader;
 
 /**
  * Primary auto loader.
@@ -80,6 +80,10 @@ class AutoLoader
     public function open($prepend = false)
     {
         spl_autoload_register(array($this, 'loadClass'), true, $prepend);
+
+//        echo '<pre>';
+//        print_r($this->namespaces);
+//        echo '</pre>';
     }
 
 
