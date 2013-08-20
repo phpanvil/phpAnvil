@@ -11,4 +11,4 @@ $anvilLoader = new AutoLoader();
 $anvilLoader->addNamespace('phpAnvil', realpath(__DIR__ . '/..') . '/src/phpAnvil');
 $anvilLoader->open();
 
-echo '<br>END OF LINE.';
+echo "\nEND OF LINE.\n";
