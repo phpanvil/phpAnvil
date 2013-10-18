@@ -73,10 +73,10 @@ class anvilButton extends anvilControlAbstract
     const SIZE_LARGE = 3;
 
     private $_sizeClass = array(
-        '',
-        'btn-mini',
-        'btn-small',
-        'btn-large'
+        'btn-default',
+        'btn-xs',
+        'btn-sm',
+        'btn-lg'
     );
 
     //---- Properties ----------------------------------------------------------

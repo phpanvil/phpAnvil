@@ -88,5 +88,3 @@ class anvilRadio extends anvilFormControlAbstract {
 	}
 
 }
-
-?>

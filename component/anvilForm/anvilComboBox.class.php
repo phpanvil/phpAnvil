@@ -12,25 +12,25 @@ class anvilComboBox extends anvilFormControlAbstract {
 	const VERSION        	= '1.0';
 
     private $_sizeClass = array(
-        'spanAuto',
+        'col-md-Auto',
         'input-mini',
-        'input-small',
+        'input-sm',
         'input-medium',
-        'input-large',
+        'input-lg',
         'input-xlarge',
         'input-xxlarge',
-        'span1',
-        'span2',
-        'span3',
-        'span4',
-        'span5',
-        'span6',
-        'span7',
-        'span8',
-        'span9',
-        'span10',
-        'span11',
-        'span12'
+        'col-md-1',
+        'col-md-2',
+        'col-md-3',
+        'col-md-4',
+        'col-md-5',
+        'col-md-6',
+        'col-md-7',
+        'col-md-8',
+        'col-md-9',
+        'col-md-10',
+        'col-md-11',
+        'col-md-12'
     );
 
     const SIZE_AUTO = 0;

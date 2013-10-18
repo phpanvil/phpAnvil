@@ -22,7 +22,7 @@ class anvilFormHelp extends anvilFormControlAbstract {
 
     private $_typeTag = array(
         'p',
-        'span'
+        'col-md-'
     );
 
     public $type = self::TYPE_BLOCK;

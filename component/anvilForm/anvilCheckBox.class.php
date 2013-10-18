@@ -96,5 +96,3 @@ class anvilCheckBox extends anvilFormControlAbstract
         return $return;
     }
 }
-
-?>

@@ -30,25 +30,25 @@ class anvilEntry extends anvilFormControlAbstract
     const VERSION = '1.0.2';
 
     private $_sizeClass = array(
-        'spanAuto',
+        'col-md-Auto',
         'input-mini',
-        'input-small',
+        'input-sm',
         'input-medium',
-        'input-large',
+        'input-lg',
         'input-xlarge',
         'input-xxlarge',
-        'span1',
-        'span2',
-        'span3',
-        'span4',
-        'span5',
-        'span6',
-        'span7',
-        'span8',
-        'span9',
-        'span10',
-        'span11',
-        'span12'
+        'col-md-1',
+        'col-md-2',
+        'col-md-3',
+        'col-md-4',
+        'col-md-5',
+        'col-md-6',
+        'col-md-7',
+        'col-md-8',
+        'col-md-9',
+        'col-md-10',
+        'col-md-11',
+        'col-md-12'
     );
 
     const SIZE_AUTO = 0;
@@ -164,18 +164,18 @@ class anvilEntry extends anvilFormControlAbstract
 
             $return .= '<div class="';
             if (!empty($appendHTML) || !empty($this->appendText)) {
-                $return .= ' input-append';
+                $return .= ' input-group';
             }
 
             if (!empty($prependHTML) || !empty($this->prependText)) {
-                $return .= ' input-prepend';
+                $return .= ' input-group';
             }
             $return .= '">';
 
             $return .= $prependHTML;
 
             if (!empty($this->prependText)) {
-                $return .= '<span class="add-on">' . $this->prependText . '</span>';
+                $return .= '<span class="input-group-addon">' . $this->prependText . '</span>';
             }
         }
 
@@ -289,7 +289,7 @@ class anvilEntry extends anvilFormControlAbstract
 //        if (!empty($this->prependText) || !empty($this->appendText)) {
         if (!empty($prependHTML) || !empty($this->prependText) || !empty($appendHTML) || !empty($this->appendText)) {
             if (!empty($this->appendText)) {
-                $return .= '<span class="add-on">' . $this->appendText . '</span>';
+                $return .= '<span class="input-group-addon">' . $this->appendText . '</span>';
             }
 
             $return .= $appendHTML;
@@ -335,5 +335,3 @@ class anvilEntry extends anvilFormControlAbstract
         return $return;
     }
 }
-
-?>

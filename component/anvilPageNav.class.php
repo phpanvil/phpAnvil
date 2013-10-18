@@ -324,7 +324,7 @@ class anvilPageNav extends anvilControlAbstract
                     } else {
                         $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', 1);
 //                        if ($this->useDIV) {
-                            $html .= '<li class="first"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseFirst . '</a></li>';
+                            $html .= '<li class="first"><a class="btn btn-sm" href="' . htmlentities($url) . '">' . $this->phraseFirst . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="first"><a href="' . htmlentities($url) . '">' . $this->phraseFirst . '</a></td>';
 //                        }
@@ -340,7 +340,7 @@ class anvilPageNav extends anvilControlAbstract
                 } else {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage-1);
 //                    if ($this->useDIV) {
-                        $html .= '<li class="prev"><a class="btn btn-small" href="' . htmlentities($url) . '" class="nextPrev">' . $this->phrasePrev . '</a></li>';
+                        $html .= '<li class="prev"><a class="btn btn-sm" href="' . htmlentities($url) . '" class="nextPrev">' . $this->phrasePrev . '</a></li>';
 //                    } else {
 //                        $html .= '<td class="prev"><a href="' . htmlentities($url) . '" class="nextPrev">' . $this->phrasePrev . '</a></td>';
 //                    }
@@ -349,7 +349,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage - 1000) > 1) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 1000);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 1000) . '...</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">' . ($this->currentPage - 1000) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 1000) . '...</a></td>';
 //                    }
@@ -358,7 +358,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage - 100) > 1) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 100);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 100) . '...</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">' . ($this->currentPage - 100) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 100) . '...</a></td>';
 //                    }
@@ -367,7 +367,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage - 10) > 1) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 10);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 10) . '...</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">' . ($this->currentPage - 10) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 10) . '...</a></td>';
 //                    }
@@ -398,7 +398,7 @@ class anvilPageNav extends anvilControlAbstract
                 for ($i=$firstNavPage; $i<=$totalNavPages; $i++) {
                     if ($i == $this->currentPage) {
 //                        if ($this->useDIV) {
-                            $html .= '<li class="active"><a class="btn btn-small active" href="#">' . $i . '</a></li>';
+                            $html .= '<li class="active"><a class="btn btn-sm active" href="#">' . $i . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="selected">' . $i . '</td>';
 //                        }
@@ -412,7 +412,7 @@ class anvilPageNav extends anvilControlAbstract
 //                            $html .= '<td><a href="' . htmlentities($url) . '"';
 //                        }
 
-                        $html .= ' class="btn btn-small';
+                        $html .= ' class="btn btn-sm';
                         if ($i == $this->currentPage) {
                             $html .= ' active';
 //                        } else {
@@ -430,7 +430,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage + 10) < $this->totalPages) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 10);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 10) . '</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">...' . ($this->currentPage + 10) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 10) . '</a></td>';
 //                    }
@@ -439,7 +439,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage + 100) < $this->totalPages) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 100);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 100) . '</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">...' . ($this->currentPage + 100) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 100) . '</a></td>';
 //                    }
@@ -448,7 +448,7 @@ class anvilPageNav extends anvilControlAbstract
                 if (($this->currentPage + 1000) < $this->totalPages) {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 1000);
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 1000) . '</a></li>';
+                        $html .= '<li><a class="btn btn-sm" href="' . htmlentities($url) . '">...' . ($this->currentPage + 1000) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 1000) . '</a></td>';
 //                    }
@@ -463,7 +463,7 @@ class anvilPageNav extends anvilControlAbstract
                 } else {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage+1);
 //                    if ($this->useDIV) {
-                        $html .= '<li class="next"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseNext . '</a></li>';
+                        $html .= '<li class="next"><a class="btn btn-sm" href="' . htmlentities($url) . '">' . $this->phraseNext . '</a></li>';
 //                    } else {
 //                        $html .= '<td class="next"><a href="' . htmlentities($url) . '">' . $this->phraseNext . '</a></td>';
 //                    }
@@ -479,7 +479,7 @@ class anvilPageNav extends anvilControlAbstract
                     } else {
                         $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->totalPages);
 //                        if ($this->useDIV) {
-                            $html .= '<li class="last"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseLast . '</a></li>';
+                            $html .= '<li class="last"><a class="btn btn-sm" href="' . htmlentities($url) . '">' . $this->phraseLast . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="last"><a href="' . htmlentities($url) . '">' . $this->phraseLast . '</a></td>';
 //                        }
