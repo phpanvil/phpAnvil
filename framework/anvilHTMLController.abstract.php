@@ -3,6 +3,7 @@
 require_once 'anvilController.abstract.php';
 require_once PHPANVIL2_COMPONENT_PATH . 'anvilAlert.class.php';
 require_once PHPANVIL2_COMPONENT_PATH . 'anvilContainer.class.php';
+require_once PHPANVIL2_COMPONENT_PATH . 'anvilResponse/anvilHTMLResponseFooter.class.php';
 require_once PHPANVIL2_COMPONENT_PATH . 'anvilResponse/anvilHTMLResponseHead.class.php';
 
 /**
@@ -26,6 +27,11 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
     protected $_templateFilename;
 
     /**
+     * @var anvilHTMLResponseFooter
+     */
+    protected $footer;
+
+    /**
      * @var anvilHTMLResponseHead
      */
     protected $_head;
@@ -45,6 +51,7 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
 //        $this->enableLog();
 
         $this->_template = $this->_application->newTemplate();
+        $this->footer = new anvilHTMLResponseFooter();
         $this->_head   = new anvilHTMLResponseHead();
 
         $this->response = new anvilContainer();
