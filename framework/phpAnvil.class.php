@@ -34,8 +34,8 @@ require_once MOBILE_DETECT_PATH . 'Mobile_Detect.php';
 class phpAnvil2 extends anvilObjectAbstract
 {
 
-    const VERSION = '2.0';
-    const BUILD   = '1';
+    const VERSION = '2.2';
+    const BUILD   = '0';
 
     const SOURCE_TYPE_UNKNOWN   = 1;
     const SOURCE_TYPE_USER      = 2;
