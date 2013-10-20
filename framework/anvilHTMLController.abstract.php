@@ -70,8 +70,8 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
         $this->_tokenArray['webPath'] = $this->_site->webPath;
 //        $this->_webPath = $this->_site->webPath;
 
-        $this->_tokenArray['body'] = array();
-        $this->_tokenArray['body']['class'] = '';
+        $this->_tokenArray['html']['body'] = array();
+        $this->_tokenArray['html']['body']['class'] = '';
 
         return true;
 	}
@@ -118,10 +118,17 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
     {
         global $phpAnvil;
 
-        $this->_head->render();
-        $this->_head->html .= $this->_preClientScript;
+        //---- Footer Tokens ---------------------------------------------------
+        $this->footer->render();
+        $this->footer->rendered .= $this->_postClientScript;
 
-        $this->_tokenArray['head'] = (array)$this->_head;
+        $this->_tokenArray['html']['footer'] = (array)$this->footer;
+
+        //---- HEAD Tokens -----------------------------------------------------
+        $this->_head->render();
+        $this->_head->rendered .= $this->_preClientScript;
+
+        $this->_tokenArray['html']['head'] = (array)$this->_head;
 
         //---- Prepare Breadcrumbs ---------------------------------------------
         $count = count($this->_breadcrumbTitle);
