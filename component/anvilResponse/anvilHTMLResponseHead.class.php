@@ -26,6 +26,7 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
 
     //---- Meta Properties -----------------------------------------------------
     public $author;
+    public $charset = 'utf-8';
     public $copyright;
     public $description;
     public $generator = 'phpAnvil';
@@ -33,6 +34,7 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
     public $meta;
     public $revised;
     public $robots;
+    public $viewport = 'width=device-width, initial-scale=1.0';
 
     //---- Render Properties -------------------------------------------------
     public $rendered = '';
@@ -89,7 +91,7 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
 
 
         if (!empty($this->base)) {
-            $this->rendered .= $this->prefix . '<base href="' . $this->base . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<base href="' . $this->base . '" >' . "\n";
         }
 
         if (!empty($this->title)) {
@@ -98,59 +100,65 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
 
         //---- HTTP ------------------------------------------------------------
         if (!empty($this->contentLanguage)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="CONTENT-LANGUAGE" content="' . $this->contentLanguage . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="CONTENT-LANGUAGE" content="' . $this->contentLanguage . '">' . "\n";
         }
         if (!empty($this->contentType)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="CONTENT-TYPE" content="' . $this->contentType . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="CONTENT-TYPE" content="' . $this->contentType . '">' . "\n";
         }
         if (!empty($this->cache)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="CACHE-CONTROL" content="' . $this->cache . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="CACHE-CONTROL" content="' . $this->cache . '">' . "\n";
         }
         if (!empty($this->pragma)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="PRAGMA" content="' . $this->pragma . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="PRAGMA" content="' . $this->pragma . '">' . "\n";
         }
         if (!empty($this->expires)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="EXPIRES" content="' . $this->expires . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="EXPIRES" content="' . $this->expires . '">' . "\n";
         }
         if (!empty($this->refresh)) {
-            $this->rendered .= $this->prefix . '<meta http-equiv="REFRESH" content="' . $this->refresh . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta http-equiv="REFRESH" content="' . $this->refresh . '">' . "\n";
         }
 
         //---- Meta ------------------------------------------------------------
+        if (!empty($this->charset)) {
+            $this->rendered .= $this->prefix . '<meta charset="' . $this->charset . '">' . "\n";
+        }
+        if (!empty($this->viewport)) {
+            $this->rendered .= $this->prefix . '<meta name="viewport" content="' . $this->viewport . '">' . "\n";
+        }
         if (!empty($this->description)) {
-            $this->rendered .= $this->prefix . '<meta name="DESCRIPTION" content="' . $this->description . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="description" content="' . $this->description . '">' . "\n";
         }
         if (!empty($this->keywords)) {
-            $this->rendered .= $this->prefix . '<meta name="KEYWORDS" content="' . $this->keywords . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="keywords" content="' . $this->keywords . '">' . "\n";
         }
         if (!empty($this->robots)) {
-            $this->rendered .= $this->prefix . '<meta name="ROBOTS" content="' . $this->robots . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="robots" content="' . $this->robots . '">' . "\n";
         }
 
         if (!empty($this->author)) {
-            $this->rendered .= $this->prefix . '<meta name="AUTHOR" content="' . $this->author . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="author" content="' . $this->author . '">' . "\n";
         }
         if (!empty($this->copyright)) {
-            $this->rendered .= $this->prefix . '<meta name="COPYRIGHT" content="' . $this->copyright . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="copyright" content="' . $this->copyright . '">' . "\n";
         }
         if (!empty($this->generator)) {
-            $this->rendered .= $this->prefix . '<meta name="GENERATOR" content="' . $this->generator . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="generator" content="' . $this->generator . '">' . "\n";
         }
         if (!empty($this->revised)) {
-            $this->rendered .= $this->prefix . '<meta name="REVISED" content="' . $this->revised . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<meta name="revised" content="' . $this->revised . '">' . "\n";
         }
         $this->rendered .= $this->meta . "\n";
 
 
         //---- Icon Links ------------------------------------------------------
         if (!empty($this->icon)) {
-            $this->rendered .= $this->prefix . '<link rel="icon" type="'. $this->iconType . '" href="' . $this->icon . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<link rel="icon" type="'. $this->iconType . '" href="' . $this->icon . '">' . "\n";
         }
 
         if (!empty($this->shortcutIcon)) {
-            $this->rendered .= $this->prefix . '<link rel="shortcut icon" type="'. $this->shortcutIconType . '" href="' . $this->shortcutIcon . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<link rel="shortcut icon" type="'. $this->shortcutIconType . '" href="' . $this->shortcutIcon . '">' . "\n";
         } elseif (!empty($this->icon)) {
-            $this->rendered .= $this->prefix . '<link rel="shortcut icon" type="'. $this->iconType . '" href="' . $this->icon . '" />' . "\n";
+            $this->rendered .= $this->prefix . '<link rel="shortcut icon" type="'. $this->iconType . '" href="' . $this->icon . '">' . "\n";
         }
 
         if (!empty($this->meta)) {
