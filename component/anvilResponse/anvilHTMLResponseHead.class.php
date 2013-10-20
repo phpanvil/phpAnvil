@@ -70,7 +70,7 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
         $this->styles .= $style . "\n";
     }
 
-    public function addStylesheet($stylesheet, $media = '')
+    public function addStylesheet($stylesheet, $media = 'screen')
     {
         $this->stylesheets .= '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '"';
 
@@ -173,5 +173,3 @@ class anvilHTMLResponseHead extends anvilObjectAbstract
         return $this->html;
     }
 }
-
-?>
