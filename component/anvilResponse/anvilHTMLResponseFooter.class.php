@@ -9,7 +9,7 @@ require_once PHPANVIL2_COMPONENT_PATH . 'anvilObject.abstract.php';
 class anvilHTMLResponseFooter extends anvilObjectAbstract
 {
     //---- Render Properties -------------------------------------------------
-    public $html = '';
+    public $rendered = '';
     public $prefix = "\t";
     public $scripts = '';
 
@@ -38,9 +38,9 @@ class anvilHTMLResponseFooter extends anvilObjectAbstract
     public function render()
     {
         if (!empty($this->scripts)) {
-            $this->html .= $this->scripts . "\n\n";
+            $this->rendered .= $this->scripts . "\n\n";
         }
 
-        return $this->html;
+        return $this->rendered;
     }
 }
