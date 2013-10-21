@@ -1,95 +1,70 @@
 <?php
-require_once 'anvilContainer.class.php';
-require_once 'anvilLink.class.php';
-require_once 'anvilLiteral.class.php';
-require_once 'anvilNavDropdown.class.php';
-require_once 'anvilNavItem.class.php';
+require_once 'anvilNavBarAlign.interface.php';
+require_once 'anvilNavBarType.interface.php';
 
+require_once 'anvilContainer.class.php';
 
 /**
- * phpAnvil Nav Control
+ * phpAnvil NavBar Control
  *
  * @copyright     Copyright (c) 2012 Nick Slevkoff (http://www.slevkoff.com)
  */
-class anvilNav extends anvilContainer
+class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, anvilNavBarTypeInterface
 {
+    public $align = self::NAVBAR_ALIGN_DEFAULT;
 
-    //---- Align ---------------------------------------------------------------
-    const ALIGN_DEFAULT = 0;
-    const ALIGN_LEFT  = 1;
-    const ALIGN_RIGHT = 2;
+    public $type = self::NAVBAR_TYPE_DEFAULT;
 
-    private $_alignClass = array(
+    public $collapseButton = true;
+    public $collapseClass = '';
+    public $containerWrapper = false;
+
+    private $alignClass = array(
         '',
-        'pull-left',
-        'pull-right'
+        'navbar-fixed-top',
+        'navbar-fixed-bottom',
+        'navbar-static-top'
     );
 
-    //---- Types ---------------------------------------------------------------
-    const TYPE_DEFAULT = 0;
-    const TYPE_SIMPLE = 0;
-    const TYPE_LIST = 1;
-    const TYPE_PILLS  = 2;
-    const TYPE_TABS = 3;
+    private $headerControls;
 
-    private $_typeClass = array(
-        '',
-        'nav-list',
-        'nav-pills',
-        'nav-tabs'
+    private $typeClass = array(
+        'navbar-default',
+        'navbar-inverse'
     );
 
-    public $align = self::ALIGN_DEFAULT;
-    public $type = self::TYPE_DEFAULT;
-    public $stacked = false;
 
-
-    public function __construct($id = '', $type = self::TYPE_DEFAULT, $align = self::ALIGN_DEFAULT, $properties = null)
+    public function __construct($id = '', $type = self::NAVBAR_TYPE_DEFAULT, $align = self::NAVBAR_ALIGN_DEFAULT, $properties = null)
     {
-
         $this->enableLog();
+
+        //---- Set Property Defaults -------------------------------------------
+        $this->role = 'navigation';
 
         parent::__construct($id, $properties);
 
-        $this->align      = $align;
+        $this->align = $align;
         $this->type = $type;
+
+        $this->headerControls = new anvilContainer();
     }
 
-    public function addControl($control)
+
+    public function addHeaderControl($control)
     {
-        $objNavItem = new anvilNavItem('', false);
-        $objNavItem->addControl($control);
-        parent::addControl($objNavItem);
-    }
-
-    public function addDivider()
-    {
-        $this->addControl(new anvilLiteral('', '<li class="divider-vertical"></li>'));
-
-    }
-
-    public function addDropdown($title)
-    {
-        $objNavDropdown = new anvilNavDropdown('', $title);
-        $this->addControl($objNavDropdown);
-
-        return $objNavDropdown;
-    }
-
-    public function addLink($text, $url = '#', $active = false, $type = anvilLink::TYPE_DEFAULT, $size = anvilLink::SIZE_DEFAULT, $properties = null)
-    {
-        $objNavItem = new anvilNavItem('', $active);
-        $objNavItem->addControl(new anvilLink('', $text, $url, $type, $size, $properties));
-        parent::addControl($objNavItem);
-
-        return $objNavItem;
+        $this->headerControls->addControl($control);
     }
 
     public function renderContent()
     {
+        $return = '';
 
         //---- Opening Tag
-        $return = '<ul';
+        if ($this->htmlVersion === self::HTML_VERSION_5) {
+            $return .= '<nav ';
+        } else {
+            $return .= '<div ';
+        }
 
         //---- ID
         if (!empty($this->id)) {
@@ -97,22 +72,77 @@ class anvilNav extends anvilContainer
         }
 
         //---- Class
-        $return .= ' class="nav';
-        $return .= ' ' . $this->_typeClass[$this->type];
-        $return .= ' ' . $this->_alignClass[$this->align];
-        if ($this->stacked) {
-            $return .= ' nav-stacked';
-        }
-        $return .= '">';
+        $return .= ' class="navbar ';
+        $return .= ' ' . $this->typeClass[$this->type];
+        $return .= ' ' . $this->alignClass[$this->align];
 
+        if (!empty($this->class)) {
+            $return .= ' ' . $this->class;
+        }
+
+        $return .= '"';
+
+        //---- Role
+        if (!empty($this->role)) {
+            $return .= ' role="' . $this->role . '"';
+        }
+
+        $return .= '>' . PHP_EOL;
+
+        //---- Start Container Wrapper -----------------------------------------
+        if ($this->containerWrapper) {
+            $return .= '<div class="container">' . PHP_EOL;
+        }
+
+        //---- Header Controls ---------------------------------------------------
+        $return .= '<div class="navbar-header">' . PHP_EOL;
+
+        //---- Collapse Button
+        if ($this->collapseButton) {
+            $return .= '<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="';
+            if (!empty($this->collapseClass)) {
+                $return .= $this->collapseClass;
+            } else {
+                $return .= '.navbar-collapse';
+            }
+            $return .= '">' . PHP_EOL;
+            $return .= '<span class="icon-bar"></span>' . PHP_EOL;
+            $return .= '<span class="icon-bar"></span>' . PHP_EOL;
+            $return .= '<span class="icon-bar"></span>' . PHP_EOL;
+            $return .= '</button>' . PHP_EOL;
+        }
+
+        $return .= $this->headerControls->render();
+        $return .= '</div>' . PHP_EOL;
+
+        //---- Start Collapsible Content ---------------------------------------
+        $return .= '<div class="navbar-collapse collapse';
+        if (!empty($this->collapseClass)) {
+            $return .= ' ' . $this->collapseClass;
+        }
+        $return .= '">' . PHP_EOL;
+
+        //---- Render Controls -------------------------------------------------
         $return .= $this->renderControls();
 
-        $return .= '</ul>';
+        //---- End Collapsible Content -----------------------------------------
+        $return .= '</div>' . PHP_EOL;
+
+
+        //---- End Container Wrapper -------------------------------------------
+        if ($this->containerWrapper) {
+            $return .= '</div>' . PHP_EOL;
+        }
+
+        //---- Closing Tag
+        if ($this->htmlVersion === self::HTML_VERSION_5) {
+            $return .= '</nav>' . PHP_EOL;
+        } else {
+            $return .= '</div>' . PHP_EOL;
+        }
 
 
         return $return;
     }
 
 }
-
-?>
