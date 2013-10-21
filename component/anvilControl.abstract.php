@@ -11,6 +11,7 @@
  */
 
 
+require_once('anvilHTMLVersion.interface.php');
 require_once('anvilObject.abstract.php');
 
 
@@ -41,7 +42,7 @@ function renderOnce($key)
  * @copyright       Copyright (c) 2010 Nick Slevkoff (http://www.slevkoff.com)
  * @ingroup         phpAnvilTools
  */
-abstract class anvilControlAbstract extends anvilObjectAbstract
+abstract class anvilControlAbstract extends anvilObjectAbstract implements anvilHTMLVersionInterface
 {
     const VERSION = '1.0';
 
@@ -109,6 +110,8 @@ abstract class anvilControlAbstract extends anvilObjectAbstract
     protected $_core;
 
     public $dataPlacement;
+
+    public $htmlVersion = self::HTML_VERSION_4;
 
 
     public function __construct($id = null, $properties = null)
