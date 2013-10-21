@@ -113,6 +113,8 @@ abstract class anvilControlAbstract extends anvilObjectAbstract implements anvil
 
     public $htmlVersion = self::HTML_VERSION_4;
 
+    public $role;
+
 
     public function __construct($id = null, $properties = null)
     {
