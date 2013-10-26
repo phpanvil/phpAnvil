@@ -28,21 +28,21 @@ class anvilControlGroup extends anvilContainer
     public function renderContent()
     {
 
-        $return = '<div class="control-group';
+        $return = '<div class="form-group';
         if (!empty($this->class)) {
             $return .= ' ' . $this->class;
         }
         $return .= '">';
 
         if (!empty($this->label)) {
-            $return .= '<label class="control-label" for="' . $this->labelForID . '">' . $this->label . '</label>';
+            $return .= '<label for="' . $this->labelForID . '">' . $this->label . '</label>';
         }
 
-        $return .= '<div class="controls">';
+//        $return .= '<div class="controls">';
 
         $return .= $this->renderControls();
 
-        $return .= '</div>';
+//        $return .= '</div>';
         $return .= '</div>';
 
 
@@ -50,5 +50,3 @@ class anvilControlGroup extends anvilContainer
     }
 
 }
-
-?>

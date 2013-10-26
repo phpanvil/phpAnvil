@@ -30,46 +30,15 @@ class anvilEntry extends anvilFormControlAbstract
     const VERSION = '1.0.2';
 
     private $_sizeClass = array(
-        'col-md-Auto',
-        'input-mini',
+        '',
         'input-sm',
-        'input-medium',
-        'input-lg',
-        'input-xlarge',
-        'input-xxlarge',
-        'col-md-1',
-        'col-md-2',
-        'col-md-3',
-        'col-md-4',
-        'col-md-5',
-        'col-md-6',
-        'col-md-7',
-        'col-md-8',
-        'col-md-9',
-        'col-md-10',
-        'col-md-11',
-        'col-md-12'
+        'input-lg'
     );
 
-    const SIZE_AUTO = 0;
-    const SIZE_MINI = 1;
-    const SIZE_SMALL = 2;
-    const SIZE_MEDIUM = 3;
-    const SIZE_LARGE = 4;
-    const SIZE_XLARGE = 5;
-    const SIZE_XXLARGE = 6;
-    const SIZE_SPAN1 = 7;
-    const SIZE_SPAN2 = 8;
-    const SIZE_SPAN3 = 9;
-    const SIZE_SPAN4 = 10;
-    const SIZE_SPAN5 = 11;
-    const SIZE_SPAN6 = 12;
-    const SIZE_SPAN7 = 13;
-    const SIZE_SPAN8 = 14;
-    const SIZE_SPAN9 = 15;
-    const SIZE_SPAN10 = 16;
-    const SIZE_SPAN11 = 17;
-    const SIZE_SPAN12 = 18;
+    const SIZE_DEFAULT = 0;
+
+    const SIZE_SMALL = 1;
+    const SIZE_LARGE = 2;
 
 
     const TYPE_NORMAL = 1;
@@ -90,7 +59,7 @@ class anvilEntry extends anvilFormControlAbstract
     public $maxLength;
     public $prependText;
     public $readOnly = false;
-    public $size;
+    public $size = self::SIZE_DEFAULT;
     public $type = self::TYPE_NORMAL;
     public $value;
 
@@ -106,7 +75,7 @@ class anvilEntry extends anvilFormControlAbstract
     public $required = false;
 
 
-    public function __construct($id = '', $name = 'unknown', $size = self::SIZE_MEDIUM, $value = '', $properties = null)
+    public function __construct($id = '', $name = 'unknown', $size = self::SIZE_DEFAULT, $value = '', $properties = null)
     {
 //		$this->_traceEnabled = $traceEnabled;
 
@@ -217,10 +186,10 @@ class anvilEntry extends anvilFormControlAbstract
             $return .= ' readonly="readonly"';
         }
 
-        $return .= ' class="';
+        $return .= ' class="form-control';
 
 //        if ($this->size != self::SIZE_LENGTH) {
-        $return .= $this->_sizeClass[$this->size];
+        $return .= ' ' . $this->_sizeClass[$this->size];
 //        }
 
         if ($this->class) {

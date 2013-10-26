@@ -15,7 +15,7 @@ class anvilDataEntry extends anvilEntry
      */
     public $field;
 
-    public function __construct(anvilModelField $field, $size = self::SIZE_MEDIUM, $properties = null)
+    public function __construct(anvilModelField $field, $size = self::SIZE_DEFAULT, $properties = null)
     {
 
 //        $this->enableLog();
@@ -34,5 +34,3 @@ class anvilDataEntry extends anvilEntry
 
 
 }
-
-?>
