@@ -17,7 +17,7 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
 
     public $collapseButton = true;
     public $collapseClass = '';
-    public $containerWrapper = false;
+//    public $containerWrapper = false;
 
     private $alignClass = array(
         '',
@@ -89,10 +89,8 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
 
         $return .= '>' . PHP_EOL;
 
-        //---- Start Container Wrapper -----------------------------------------
-        if ($this->containerWrapper) {
-            $return .= '<div class="container">' . PHP_EOL;
-        }
+        //---- Render Container Header -----------------------------------------
+        $return .= $this->renderContainerHeader();
 
         //---- Header Controls ---------------------------------------------------
         $return .= '<div class="navbar-header">' . PHP_EOL;
@@ -129,10 +127,8 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
         $return .= '</div>' . PHP_EOL;
 
 
-        //---- End Container Wrapper -------------------------------------------
-        if ($this->containerWrapper) {
-            $return .= '</div>' . PHP_EOL;
-        }
+        //---- Render Container Footer -----------------------------------------
+        $return .= $this->renderContainerFooter();
 
         //---- Closing Tag
         if ($this->htmlVersion === self::HTML_VERSION_5) {

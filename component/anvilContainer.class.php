@@ -26,7 +26,6 @@ class anvilContainer extends anvilControlAbstract
 
     const VERSION = '2.0';
 
-
     /**
      * Collection of children controls within the container.
      *
@@ -43,6 +42,8 @@ class anvilContainer extends anvilControlAbstract
      * @var string
      */
     public $innerTemplate;
+
+    private $containerHTMLEnabled = false;
 
 
     public function __construct($id = 0, $properties = null)
@@ -65,15 +66,42 @@ class anvilContainer extends anvilControlAbstract
     }
 
 
+    public function disableContainerHTML()
+    {
+        $this->setContainerHTMLEnabled(false);
+    }
+
+
+    public function enableContainerHTML()
+    {
+        $this->setContainerHTMLEnabled(true);
+    }
+
+
+    public function isContainerHTMLEnabled()
+    {
+        return $this->containerHTMLEnabled;
+    }
+
+
     public function preRenderControl($control)
     {
+    }
+
+
+    public function renderContent()
+    {
+        $return = '';
+        $return .= $this->renderControls();
+
+        return $return;
     }
 
 
     public function renderControls()
     {
 //        $this->_logDebug('Executing...id_' . $this->id);
-        $return         = '';
+        $return = '';
         $_anvilTemplate = null;
 
 //        $this->_logDebug(is_object($this->anvilTemplate), 'Is Template Availabe?');
@@ -110,10 +138,17 @@ class anvilContainer extends anvilControlAbstract
     }
 
 
-    public function renderContent()
+    public function renderPostClientScript()
     {
+        //		$this->_logDebug('renderPostClientScript...id_' . $this->id);
         $return = '';
-        $return .= $this->renderControls();
+        if (!is_null($this->controls)) {
+            for ($this->controls->moveFirst(); $this->controls->hasMore(); $this->controls->moveNext()) {
+                $objControl = $this->controls->current();
+                $return .= $objControl->renderPostClientScript();
+            }
+        }
+
         return $return;
     }
 
@@ -128,23 +163,37 @@ class anvilContainer extends anvilControlAbstract
                 $return .= $objControl->renderPreClientScript();
             }
         }
+
         return $return;
     }
 
 
-    public function renderPostClientScript()
+    public function setContainerHTMLEnabled($value = true)
     {
-        //		$this->_logDebug('renderPostClientScript...id_' . $this->id);
+        $this->containerHTMLEnabled = $value;
+    }
+
+
+    protected function renderContainerFooter()
+    {
         $return = '';
-        if (!is_null($this->controls)) {
-            for ($this->controls->moveFirst(); $this->controls->hasMore(); $this->controls->moveNext()) {
-                $objControl = $this->controls->current();
-                $return .= $objControl->renderPostClientScript();
-            }
+
+        if ($this->isContainerHTMLEnabled()) {
+            $return .= '</div>' . PHP_EOL;
         }
+
         return $return;
     }
 
-}
 
-?>
+    protected function renderContainerHeader()
+    {
+        $return = '';
+
+        if ($this->isContainerHTMLEnabled()) {
+            $return .= '<div class="container">' . PHP_EOL;
+        }
+
+        return $return;
+    }
+}

@@ -15,6 +15,7 @@ class anvilForm extends anvilContainer
     const METHOD_POST = 'post';
 
     private $_typeClass = array(
+        '',
         'form-horizontal',
         'form-inline',
         'form-search',
@@ -23,11 +24,12 @@ class anvilForm extends anvilContainer
     );
 
     const TYPE_DEFAULT    = 0;
-    const TYPE_HORIZONTAL = 0;
-    const TYPE_INLINE     = 1;
-    const TYPE_SEARCH     = 2;
-    const TYPE_VERTICAL   = 3;
-    const TYPE_STACKED    = 4;
+    const TYPE_BASIC = 0;
+    const TYPE_HORIZONTAL = 1;
+    const TYPE_INLINE     = 2;
+    const TYPE_SEARCH     = 3;
+    const TYPE_VERTICAL   = 4;
+    const TYPE_STACKED    = 5;
 
     public $action;
     public $actions;
@@ -49,6 +51,8 @@ class anvilForm extends anvilContainer
         $this->method = $method;
         $this->action = $action;
         $this->type   = $type;
+
+        $this->role = 'form';
 
         $this->actions = new anvilContainer();
     }
@@ -92,7 +96,13 @@ class anvilForm extends anvilContainer
 
     public function renderHeader()
     {
-        $return = '<form';
+        $return = '';
+
+        //---- Render Container Header -----------------------------------------
+        $return .= $this->renderContainerHeader();
+
+
+        $return .= '<form';
 
         if ($this->id) {
             $return .= ' id="' . $this->id . '"';
@@ -136,6 +146,10 @@ class anvilForm extends anvilContainer
             $return .= ' target="' . $this->target . '"';
         }
 
+        if (!empty($this->role)) {
+            $return .= ' role="' . $this->role . '"';
+        }
+
         $return .= '>';
 
 
@@ -147,9 +161,10 @@ class anvilForm extends anvilContainer
     {
         $return = '</form>';
 
+        //---- Render Container Footer -----------------------------------------
+        $return .= $this->renderContainerFooter();
+
         return $return;
     }
 
 }
-
-?>
