@@ -1,0 +1,32 @@
+<?php
+
+interface anvilValidationTypeInterface
+{
+    const VALIDATION_TYPE_EMAIL = 1;
+
+    const VALIDATION_TYPE_NUMBER = 2;
+
+    const VALIDATION_TYPE_REQUIRED = 3;
+
+    const VALIDATION_TYPE_MAX = 4;
+
+    const VALIDATION_TYPE_MIN = 5;
+
+    const VALIDATION_TYPE_MAX_LENGTH = 6;
+
+    const VALIDATION_TYPE_MIN_LENGTH = 7;
+
+    const VALIDATION_TYPE_PATTERN = 8;
+
+    const VALIDATION_TYPE_MATCH = 9;
+
+    const VALIDATION_TYPE_MAX_CHECKED = 10;
+
+    const VALIDATION_TYPE_MIN_CHECKED = 11;
+
+    const VALIDATION_TYPE_REGEX = 12;
+
+    const VALIDATION_TYPE_CALLBACK = 13;
+
+    const VALIDATION_TYPE_AJAX = 14;
+}
