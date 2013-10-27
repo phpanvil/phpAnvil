@@ -12,6 +12,7 @@
 
 
 require_once PHPANVIL2_COMPONENT_PATH . 'anvilContainer.class.php';
+require_once 'anvilEntryType.interface.php';
 require_once 'anvilFormControl.abstract.php';
 
 
@@ -24,7 +25,7 @@ require_once 'anvilFormControl.abstract.php';
  * @copyright     Copyright (c) 2010 Nick Slevkoff (http://www.slevkoff.com)
  * @ingroup         phpAnvilTools
  */
-class anvilEntry extends anvilFormControlAbstract
+class anvilEntry extends anvilFormControlAbstract implements anvilEntryTypeInterface
 {
 
     const VERSION = '1.0.2';
@@ -39,11 +40,6 @@ class anvilEntry extends anvilFormControlAbstract
 
     const SIZE_SMALL = 1;
     const SIZE_LARGE = 2;
-
-
-    const TYPE_NORMAL = 1;
-    const TYPE_PASSWORD = 2;
-    const TYPE_FILE = 3;
 
     /** @var anvilContainer */
     public $append;
@@ -60,7 +56,7 @@ class anvilEntry extends anvilFormControlAbstract
     public $prependText;
     public $readOnly = false;
     public $size = self::SIZE_DEFAULT;
-    public $type = self::TYPE_NORMAL;
+    public $type = self::ENTRY_TYPE_NORMAL;
     public $value;
 
 
@@ -73,6 +69,14 @@ class anvilEntry extends anvilFormControlAbstract
     public $validation = true;
     public $validationHelp = false;
     public $required = false;
+
+    private $entryTypeNames = array(
+        'text',
+        'password',
+        'file',
+        'email',
+        'number'
+    );
 
 
     public function __construct($id = '', $name = 'unknown', $size = self::SIZE_DEFAULT, $value = '', $properties = null)
@@ -151,19 +155,7 @@ class anvilEntry extends anvilFormControlAbstract
 
         //---- Render INPUT Tag ------------------------------------------------
         $return .= '<input type="';
-
-        switch ($this->type) {
-            case self::TYPE_PASSWORD:
-                $return .= 'password';
-                break;
-            case self::TYPE_FILE:
-                $return .= 'file';
-                break;
-            case self::TYPE_NORMAL:
-            default:
-                $return .= 'text';
-                break;
-        }
+        $return .= $this->entryTypeNames[$this->type];
         $return .= '"';
 
         if ($this->id) {
