@@ -1,27 +1,23 @@
 <?php
-require_once('anvilControl.abstract.php');
 
+require_once('anvilLabelType.interface.php');
+
+require_once('anvilControl.abstract.php');
 
 /**
  * Inline Label Control
  *
  * @copyright     Copyright (c) 2010 Nick Slevkoff (http://www.slevkoff.com)
  */
-class anvilLabel extends anvilControlAbstract
+class anvilLabel extends anvilControlAbstract implements anvilLabelTypeInterface
 {
-
-    const TYPE_DEFAULT = 0;
-    const TYPE_SUCCESS = 1;
-    const TYPE_WARNING = 2;
-    const TYPE_IMPORTANT = 3;
-    const TYPE_INFO = 4;
-
     public $typeClass = array(
-        '',
+        'label-default',
         'label-success',
         'label-warning',
-        'label-important',
-        'label-info'
+        'label-danger',
+        'label-info',
+        'label-primary'
     );
 
 
@@ -29,7 +25,7 @@ class anvilLabel extends anvilControlAbstract
     public $value;
 
 
-    public function __construct($id = '', $value = '', $type = self::TYPE_DEFAULT, $properties = null)
+    public function __construct($id = '', $value = '', $type = self::LABEL_TYPE_DEFAULT, $properties = null)
     {
 //        unset($this->type);
 //        unset($this->value);
@@ -62,4 +58,3 @@ class anvilLabel extends anvilControlAbstract
         return $return;
     }
 }
-?>
