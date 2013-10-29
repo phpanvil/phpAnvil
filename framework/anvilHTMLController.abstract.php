@@ -177,8 +177,8 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
     {
         //---- HEAD ------------------------------------------------------------
 
-        $alerts = $this->_renderAlerts();
-        $this->_tokenArray['app']['alerts'] = $alerts;
+//        $alerts = $this->_renderAlerts();
+//        $this->_tokenArray['app']['alerts'] = $alerts;
 
 
         if (is_object($this->_template)) {
@@ -220,49 +220,4 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
         return $return;
     }
 
-
-    private function _renderAlertType($type, $typeName, $iconClass = '')
-    {
-        $html = '';
-
-        if (array_key_exists('alert.' . $typeName, $_SESSION)) {
-            $messages = explode('|-[', $_SESSION['alert.' . $typeName]);
-
-            $max = count($messages);
-
-            for ($i=1; $i < $max; $i++) {
-
-                $message = explode(']|', $messages[$i]);
-
-                $objAlert = new anvilAlert('', $type, $message[0], $message[1]);
-
-                if (!empty($iconClass)) {
-                    $objAlert->iconClass = $iconClass;
-                }
-
-                $html .= $objAlert->renderContent();
-            }
-
-            $_SESSION['alert.' . $typeName] = '';
-
-        }
-
-        return $html;
-    }
-
-
-
-    protected function _renderAlerts()
-    {
-        $html = '';
-        $html .= $this->_renderAlertType(anvilAlert::TYPE_ERROR, 'error', 'icon-exclamation-sign');
-        $html .= $this->_renderAlertType(anvilAlert::TYPE_WARNING, 'warning', 'icon-warning-sign');
-        $html .= $this->_renderAlertType(anvilAlert::TYPE_SUCCESS, 'success', 'icon-ok-sign');
-        $html .= $this->_renderAlertType(anvilAlert::TYPE_INFO, 'info', 'icon-info-sign');
-
-        return $html;
-    }
-
 }
-
-?>

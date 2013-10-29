@@ -1,5 +1,9 @@
 <?php
 
+require_once('anvilAlertType.interface.php');
+
+require_once('anvilAlertMessage.class.php');
+
 require_once('anvilContainer.class.php');
 
 
@@ -8,103 +12,82 @@ require_once('anvilContainer.class.php');
  *
  * @copyright       Copyright (c) 2009-2012 Nick Slevkoff (http://www.slevkoff.com)
  */
-class anvilAlert extends anvilContainer
+class anvilAlert extends anvilContainer implements anvilAlertTypeInterface
 {
 
-    const VERSION = '1.0';
-
-    //---- Types ---------------------------------------------------------------
-    const TYPE_DEFAULT = 4;
-    const TYPE_INFO    = 2;
-    const TYPE_SUCCESS = 3;
-    const TYPE_WARNING = 4;
-    const TYPE_DANGER  = 5;
-    const TYPE_ERROR   = 5;
-
-    private $_typeClass = array(
-        '','',
-        'alert-info',
-        'alert-success',
-        '',
-        'alert-error'
-    );
+    public $key = 'app.alert';
 
 
-    public $title;
-    public $type = self::TYPE_DEFAULT;
-    public $message;
-    public $block = false;
-    public $closeable = true;
-    public $iconClass = '';
-
-
-    public function __construct($id = 0, $type = self::TYPE_DEFAULT, $title = '', $message = '', $properties = null)
+    public function __construct($id = 0, $properties = null)
     {
-
         parent::__construct($id, $properties);
 
-        $this->type = $type;
-        $this->title = $title;
-        $this->message = $message;
+        $this->enableLog();
+    }
+
+
+    public function add($content, $type = self::ALERT_TYPE_DEFAULT, $title = '')
+    {
+        $index = 0;
+
+        if (array_key_exists($this->key, $_SESSION)) {
+            $index = count($_SESSION[$this->key]);
+        }
+
+        $_SESSION[$this->key][$index]['type'] = $type;
+
+        if (!empty($title)) {
+            $_SESSION[$this->key][$index]['title'] = $title;
+        }
+
+        $_SESSION[$this->key][$index]['content'] = $content;
+
+        return $index;
+    }
+
+
+    public function addButton($index, $text, $url, $class = 'btn btn-default')
+    {
+        $buttonIndex = 0;
+
+        if (array_key_exists($this->key, $_SESSION) && array_key_exists($index, $_SESSION[$this->key])) {
+            if (array_key_exists('buttons', $_SESSION[$this->key][$index])) {
+                $buttonIndex = count($_SESSION[$this->key][$index]['buttons']);
+            }
+
+            $_SESSION[$this->key][$index]['buttons'][$buttonIndex]['text'] = $text;
+            $_SESSION[$this->key][$index]['buttons'][$buttonIndex]['url'] = $url;
+            $_SESSION[$this->key][$index]['buttons'][$buttonIndex]['class'] = $class;
+        }
     }
 
 
     public function renderContent()
     {
 
-        //---- Opening Tag
-        $return = '<div';
+        $return = '';
 
-        //---- ID
-        if ($this->id) {
-            $return .= ' id="' . $this->id . '"';
+        if (!empty($_SESSION[$this->key])) {
+            $this->_logDebug($_SESSION[$this->key]);
+
+            $alerts = $_SESSION[$this->key];
+
+            foreach ($alerts as $index => $alert) {
+
+                $alertMessage = new anvilAlertMessage($alert['content'], $alert['type']);
+
+                if (array_key_exists('title', $alert)) {
+                    $alertMessage->title = $alert['title'];
+                }
+
+                $this->addControl($alertMessage);
+            }
+
+            $_SESSION[$this->key] = '';
         }
 
-        //---- Class
-        $return .= ' class="alert';
-        
-        $return .= ' ' . $this->_typeClass[$this->type];
-        
-        if ($this->block) {
-            $return .= ' alert-block';
-        }
-
-        if (!empty($this->class)) {
-            $return .= ' ' . $this->class;
-        }
-
-        $return .= '"';
-
-        //---- Style
-        if ($this->style) {
-            $return .= ' style="' . $this->style . '"';
-        }
-
-        $return .= '>';
-        
-        //---- Close Button
-        if ($this->closeable) {
-            $return .= '<a class="close" data-dismiss="alert">×</a>';
-        }
-
-        if (!empty($this->iconClass)) {
-            $return .= '<div class="alert-icon"><i class="' . $this->iconClass . '"></i></div>';
-        }
-
-        //---- Title
-        if (!empty($this->title)) {
-            $return .= '<h4 class="alert-heading">';
-            $return .= $this->title . '</h4>';
-        }
-
-        //---- Message
-        $return .= '<p class="alert-content">' . $this->message . '</p>';
         $return .= $this->renderControls();
-
-        $return .= '</div>';
 
         return $return;
     }
 }
-
-?>

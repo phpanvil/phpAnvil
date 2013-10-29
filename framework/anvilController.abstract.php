@@ -152,58 +152,6 @@ abstract class anvilControllerAbstract extends anvilObjectAbstract
     }
 
 
-    public function addErrorAlert($title = '', $message = '')
-    {
-        //        $this->response->alerts->addControl(new anvilAlert('', anvilAlert::TYPE_ERROR, $title, $message));
-        $newAlertMessage = '|-[' . $title . ']|' . $message;
-
-        if (array_key_exists('alert.error', $_SESSION)) {
-            $_SESSION['alert.error'] .= $newAlertMessage;
-        } else {
-            $_SESSION['alert.error'] = $newAlertMessage;
-        }
-    }
-
-
-    public function addInfoAlert($title = '', $message = '')
-    {
-        //        $this->response->alerts->addControl(new anvilAlert('', anvilAlert::TYPE_INFO, $title, $message));
-        $newAlertMessage = '|-[' . $title . ']|' . $message;
-
-        if (array_key_exists('alert.info', $_SESSION)) {
-            $_SESSION['alert.info'] .= $newAlertMessage;
-        } else {
-            $_SESSION['alert.info'] = $newAlertMessage;
-        }
-    }
-
-
-    public function addSuccessAlert($title = '', $message = '')
-    {
-        //        $this->response->alerts->addControl(new anvilAlert('', anvilAlert::TYPE_SUCCESS, $title, $message));
-        $newAlertMessage = '|-[' . $title . ']|' . $message;
-
-        if (array_key_exists('alert.success', $_SESSION)) {
-            $_SESSION['alert.success'] .= $newAlertMessage;
-        } else {
-            $_SESSION['alert.success'] = $newAlertMessage;
-        }
-    }
-
-
-    public function addWarningAlert($title = '', $message = '')
-    {
-        //        $this->response->alerts->addControl(new anvilAlert('', anvilAlert::TYPE_WARNING, $title, $message));
-        $newAlertMessage = '|-[' . $title . ']|' . $message;
-
-        if (array_key_exists('alert.warning', $_SESSION)) {
-            $_SESSION['alert.warning'] .= $newAlertMessage;
-        } else {
-            $_SESSION['alert.warning'] = $newAlertMessage;
-        }
-    }
-
-
     function loadModules()
     {
         return true;
@@ -308,5 +256,3 @@ abstract class anvilControllerAbstract extends anvilObjectAbstract
         }
     }
 }
-
-?>
