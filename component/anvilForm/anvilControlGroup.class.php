@@ -12,6 +12,7 @@ class anvilControlGroup extends anvilContainer
 
     public $label;
     public $labelForID;
+    public $isRequired = false;
 
     public function __construct($id = '', $label = '', $labelForID = '', $properties = null)
     {
@@ -35,7 +36,13 @@ class anvilControlGroup extends anvilContainer
         $return .= '">';
 
         if (!empty($this->label)) {
-            $return .= '<label for="' . $this->labelForID . '">' . $this->label . '</label>';
+            $return .= '<label for="' . $this->labelForID . '">';
+
+            if ($this->isRequired) {
+                $return .= '<i class="fa fa-asterisk" title="required"></i>';
+            }
+
+            $return .= $this->label . '</label>';
         }
 
 //        $return .= '<div class="controls">';
