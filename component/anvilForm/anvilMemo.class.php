@@ -1,6 +1,6 @@
 <?php
 
-require_once 'anvilFormControl.abstract.php';
+require_once 'anvilValidationFormControl.abstract.php';
 
 
 /**
@@ -8,66 +8,16 @@ require_once 'anvilFormControl.abstract.php';
  *
  * @copyright     Copyright (c) 2010-2012 Nick Slevkoff (http://www.slevkoff.com)
  */
-class anvilMemo extends anvilFormControlAbstract
+class anvilMemo extends anvilValidationFormControlAbstract
 {
 
-    const VERSION = '1.0';
-
-    private $_sizeClass = array(
-        'input-mini',
-        'input-sm',
-        'input-medium',
-        'input-lg',
-        'input-xlarge',
-        'input-xxlarge',
-        'col-md-1',
-        'col-md-2',
-        'col-md-3',
-        'col-md-4',
-        'col-md-5',
-        'col-md-6',
-        'col-md-7',
-        'col-md-8',
-        'col-md-9',
-        'col-md-10',
-        'col-md-11',
-        'col-md-12',
-        'input-full'
-    );
-
-    const SIZE_MINI    = 0;
-    const SIZE_SMALL   = 1;
-    const SIZE_MEDIUM  = 2;
-    const SIZE_LARGE   = 3;
-    const SIZE_XLARGE  = 4;
-    const SIZE_XXLARGE = 5;
-    const SIZE_SPAN1   = 6;
-    const SIZE_SPAN2   = 7;
-    const SIZE_SPAN3   = 8;
-    const SIZE_SPAN4   = 9;
-    const SIZE_SPAN5   = 10;
-    const SIZE_SPAN6   = 11;
-    const SIZE_SPAN7   = 12;
-    const SIZE_SPAN8   = 13;
-    const SIZE_SPAN9   = 14;
-    const SIZE_SPAN10  = 15;
-    const SIZE_SPAN11  = 16;
-    const SIZE_SPAN12  = 17;
-    const SIZE_FULL = 18;
-
     public $rows;
-    public $size = self::SIZE_MEDIUM;
     public $value;
 
-
-//    public $wrapEnabled = false;
-
-
-    public function __construct($id = '', $name = '', $size = self::SIZE_MEDIUM, $rows = 3, $value = '', $properties = array())
+    public function __construct($id = '', $name = '', $rows = 3, $value = '', $properties = array())
     {
 
         $this->rows    = $rows;
-        $this->size = $size;
         $this->value   = $value;
 
         parent::__construct($id, $name, $properties);
@@ -96,7 +46,8 @@ class anvilMemo extends anvilFormControlAbstract
             $return .= ' rows="' . $this->rows . '"';
         }
 
-        $return .= ' class="' . $this->_sizeClass[$this->size];
+        $return .= ' class="form-control';
+
         if ($this->class) {
             $return .= ' ' . $this->class;
         }
@@ -106,6 +57,9 @@ class anvilMemo extends anvilFormControlAbstract
             $return .= ' style="' . $this->style . '"';
         }
 
+        //---- Render Validation -----------------------------------------------
+        $return .= $this->renderValidationParameters();
+
         $return .= '>';
 
         if ($this->value) {
@@ -114,9 +68,11 @@ class anvilMemo extends anvilFormControlAbstract
 
         $return .= '</textarea>';
 
+        if ($this->validation) {
+            $return .= '<span class="help-block"></span>';
+        }
+
         return $return;
     }
 
 }
-
-?>
