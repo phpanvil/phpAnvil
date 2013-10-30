@@ -161,21 +161,12 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
         $this->_tokenArray['page']['breadcrumbs'] = $html;
 
 
-        //---- Assign Tokens to Template ---------------------------------------
-
-        $tokenKeys = array_keys($this->_tokenArray);
-        $count = count($tokenKeys);
-
-        for ($i=0; $i < $count; $i++) {
-            $this->_assign($tokenKeys[$i], $this->_tokenArray[$tokenKeys[$i]]);
-        }
     }
 
 
 
     protected function _display()
     {
-        //---- HEAD ------------------------------------------------------------
 
 //        $alerts = $this->_renderAlerts();
 //        $this->_tokenArray['app']['alerts'] = $alerts;
@@ -189,10 +180,19 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
         $this->_logVerbose('Assigning tokens...');
         $this->_assignTokens();
 
-        $this->_logVerbose('Rendering controls...');
-        $this->_displayControls();
+        //---- Assign Tokens to Template ---------------------------------------
 
-        $this->_logVerbose('Rendering complete, template engine has the wheel...');
+        $tokenKeys = array_keys($this->_tokenArray);
+        $count = count($tokenKeys);
+
+        for ($i = 0; $i < $count; $i++) {
+            $this->_assign($tokenKeys[$i], $this->_tokenArray[$tokenKeys[$i]]);
+        }
+
+//        $this->_logVerbose('Rendering controls...');
+//        $this->_displayControls();
+
+//        $this->_logVerbose('Rendering complete, template engine has the wheel...');
 
         return $this->_template->display($this->_templateFilename);
 
