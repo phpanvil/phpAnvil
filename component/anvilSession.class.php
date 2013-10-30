@@ -114,9 +114,11 @@ class anvilSession extends anvilDynamicObjectAbstract
             #---- Detect User IP
             if ($this->_isConsole) {
                 $this->userIP = getHostByName(SITE_DOMAIN);
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $this->userIP = $_SERVER['HTTP_X_FORWARDED_FOR'];
             } elseif (isset($_SERVER["HTTP_X_CLUSTER_CLIENT_IP"])) {
                 $this->userIP = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-            } elseif (isset($_SERVER["REMOTE_ADDR"])) {
+            } elseif (isset($_SERVER['REMOTE_ADDR'])) {
                 $this->userIP = $_SERVER['REMOTE_ADDR'];
             }
 
