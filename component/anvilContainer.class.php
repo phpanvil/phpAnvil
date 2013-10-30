@@ -26,6 +26,8 @@ class anvilContainer extends anvilControlAbstract
 
     const VERSION = '2.0';
 
+    public $containerClass;
+
     /**
      * Collection of children controls within the container.
      *
@@ -92,7 +94,10 @@ class anvilContainer extends anvilControlAbstract
     public function renderContent()
     {
         $return = '';
+
+        $return .= $this->renderContainerHeader();
         $return .= $this->renderControls();
+        $return .= $this->renderContainerFooter();
 
         return $return;
     }
@@ -191,7 +196,13 @@ class anvilContainer extends anvilControlAbstract
         $return = '';
 
         if ($this->isContainerHTMLEnabled()) {
-            $return .= '<div class="container">' . PHP_EOL;
+            $return .= '<div class="container';
+
+            if (!empty($this->containerClass)) {
+                $return .= ' ' . $this->containerClass;
+            }
+
+            $return .= '">' . PHP_EOL;
         }
 
         return $return;
