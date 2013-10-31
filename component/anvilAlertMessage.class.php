@@ -14,7 +14,7 @@ class anvilAlertMessage extends anvilContainer implements anvilAlertTypeInterfac
         '',
         'alert-success',
         'alert-warning',
-        'alert-error',
+        'alert-danger',
         'alert-info'
     );
 
