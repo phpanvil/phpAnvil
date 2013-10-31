@@ -1,4 +1,9 @@
 <?php
+
+require_once('anvilButtonAction.interface.php');
+require_once('anvilButtonSize.interface.php');
+require_once('anvilButtonType.interface.php');
+
 require_once('anvilControl.abstract.php');
 
 
@@ -8,23 +13,35 @@ require_once('anvilControl.abstract.php');
  * @copyright       Copyright (c) 2012 Nick Slevkoff (http://www.slevkoff.com)
  */
 class anvilButton extends anvilControlAbstract
+    implements anvilButtonActionInterface, anvilButtonSizeInterface, anvilButtonTypeInterface
 {
+    public $action = self::BUTTON_ACTION_DEFAULT;
 
-    const VERSION = '1.0';
+    public $ariaHidden;
 
+    public $confirmMsg;
 
-    //---- Action Types --------------------------------------------------------
-    const ACTION_TYPE_DEFAULT = 0;
-    const ACTION_TYPE_SIMPLE = 0;
-    const ACTION_TYPE_SUBMIT = 1;
-    const ACTION_TYPE_RESET  = 2;
-    const ACTION_TYPE_BUTTON = 3;
-    const ACTION_TYPE_IMAGE  = 4;
-    const ACTION_TYPE_DELETE = 5;
-    const ACTION_TYPE_DISABLE = 6;
-    const ACTION_TYPE_TOGGLE = 7;
+    //---- Properties ----------------------------------------------------------
 
-    private $_actionTypeText = array(
+    public $dataDismiss;
+
+    public $isActive = false;
+
+    public $isBlock = false;
+
+    public $isDisabled = false;
+
+    public $name = 'btn';
+
+    public $size = self::BUTTON_SIZE_DEFAULT;
+
+    public $text;
+
+    public $type = self::BUTTON_TYPE_DEFAULT;
+
+    public $value = '';
+
+    private $_actionText = array(
         '',
         'submit',
         'reset',
@@ -35,26 +52,12 @@ class anvilButton extends anvilControlAbstract
         'button'
     );
 
-    private $_actionTypeDefault = array(
-        0,
-        1,
-        0,
-        0,
-        0,
-        5,
-        4,
-        0
+    private $_sizeClass = array(
+        '',
+        'btn-xs',
+        'btn-sm',
+        'btn-lg'
     );
-
-
-    //---- Types ---------------------------------------------------------------
-    const TYPE_DEFAULT = 0;
-    const TYPE_PRIMARY = 1;
-    const TYPE_INFO    = 2;
-    const TYPE_SUCCESS = 3;
-    const TYPE_WARNING = 4;
-    const TYPE_DANGER  = 5;
-    const TYPE_INVERSE = 6;
 
     private $_typeClass = array(
         '',
@@ -66,43 +69,13 @@ class anvilButton extends anvilControlAbstract
         'btn-inverse'
     );
 
-    //---- Sizes ---------------------------------------------------------------
-    const SIZE_DEFAULT = 0;
-    const SIZE_MINI = 1;
-    const SIZE_SMALL = 2;
-    const SIZE_LARGE = 3;
 
-    private $_sizeClass = array(
-        'btn-default',
-        'btn-xs',
-        'btn-sm',
-        'btn-lg'
-    );
-
-    //---- Properties ----------------------------------------------------------
-    public $actionType = self::ACTION_TYPE_DEFAULT;
-    public $checked = false;
-    public $confirmMsg;
-    public $name = 'btn';
-    public $size = self::SIZE_DEFAULT;
-    public $type;
-    public $text;
-    public $value = '';
-
-    public $dataDismiss;
-    public $ariaHidden;
-
-
-    public function __construct($id = '', $text = 'Submit', $actionType = self::ACTION_TYPE_DEFAULT, $type = self::TYPE_DEFAULT, $size = self::SIZE_DEFAULT, $properties = array())
+    public function __construct($id = '', $text = 'Submit', $action = self::BUTTON_ACTION_DEFAULT, $type = self::BUTTON_TYPE_DEFAULT, $size = self::BUTTON_SIZE_DEFAULT, $properties = array())
     {
-        $this->actionType = $actionType;
+        $this->action = $action;
         $this->text = $text;
         $this->type = $type;
         $this->size = $size;
-
-        if ($this->type == self::TYPE_DEFAULT) {
-            $this->type = $this->_actionTypeDefault[$this->actionType];
-        }
 
         parent::__construct($id, $properties);
     }
@@ -117,14 +90,26 @@ class anvilButton extends anvilControlAbstract
             $return .= ' id="' . $this->id . '"';
         }
 
+//        $return .= ' type="button"';
+        //---- Type
+        if (!empty($this->_actionText[$this->action])) {
+            $return .= ' type="';
+            $return .= $this->_actionText[$this->action];
+            $return .= '"';
+        }
+
         //---- Class
         $return .= ' class="btn';
-        if ($this->actionType != self::ACTION_TYPE_SIMPLE) {
+        if ($this->action != self::BUTTON_ACTION_SIMPLE) {
             $return .= ' ' . $this->_sizeClass[$this->size];
             $return .= ' ' . $this->_typeClass[$this->type];
         }
 
-        if ($this->actionType == self::ACTION_TYPE_TOGGLE) {
+        if ($this->isBlock) {
+            $return .= ' btn-block';
+        }
+
+        if ($this->action == self::BUTTON_ACTION_TOGGLE) {
             $return .= ' btn-toggle';
         }
 
@@ -132,7 +117,7 @@ class anvilButton extends anvilControlAbstract
             $return .= ' ' . $this->class;
         }
 
-        if ($this->checked) {
+        if ($this->isActive) {
             $return .= ' active';
         }
 
@@ -142,17 +127,6 @@ class anvilButton extends anvilControlAbstract
             $return .= ' style="' . $this->style . '"';
         }
 
-        //---- Type
-        if (!empty($this->_actionTypeText[$this->actionType])) {
-            $return .= ' type="';
-            $return .= $this->_actionTypeText[$this->actionType];
-            $return .= '"';
-        }
-
-//        if ($this->value) {
-//            if ($this->actionType == self::ACTION_TYPE_IMAGE) {
-//                $return .= ' src="' . $this->value . '"';
-//            } else {
 
         if ($this->name != '') {
             $return .= ' name="' . $this->name . '"';
@@ -163,8 +137,10 @@ class anvilButton extends anvilControlAbstract
         } else {
             $return .= ' value="' . $this->text . '"';
         }
-//            }
-//        }
+
+        if ($this->isDisabled) {
+            $return .= ' disabled="disabled"';
+        }
 
         if ($this->dataDismiss) {
             $return .= ' data-dismiss="' . $this->dataDismiss . '"';
@@ -188,5 +164,3 @@ class anvilButton extends anvilControlAbstract
         return $return;
     }
 }
-
-?>
