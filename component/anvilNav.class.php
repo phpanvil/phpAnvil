@@ -114,5 +114,3 @@ class anvilNav extends anvilContainer
     }
 
 }
-
-?>

@@ -56,7 +56,7 @@ class anvilNavDropdown extends anvilContainer
         }
         $return .= '" data-toggle="dropdown">';
         $return .= $this->title;
-        $return .= '<b class="caret"></b>';
+        $return .= '<span class="caret"></span>';
         $return .= '</a>';
 
         $return .= '<ul class="dropdown-menu">';
@@ -71,5 +71,3 @@ class anvilNavDropdown extends anvilContainer
     }
 
 }
-
-?>
