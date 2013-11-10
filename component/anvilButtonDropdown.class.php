@@ -1,7 +1,8 @@
 <?php
+require_once('anvilButtonType.interface.php');
+
 require_once 'anvilContainer.class.php';
 require_once 'anvilLiteral.class.php';
-
 
 /**
  * phpAnvil Button Dropdown Control
@@ -9,6 +10,7 @@ require_once 'anvilLiteral.class.php';
  * @copyright     Copyright (c) 2012 Nick Slevkoff (http://www.slevkoff.com)
  */
 class anvilButtonDropdown extends anvilContainer
+    implements anvilButtonTypeInterface
 {
 
     public $title;
@@ -18,8 +20,20 @@ class anvilButtonDropdown extends anvilContainer
 
     public $isSplit = false;
 
+    public $type = self::BUTTON_TYPE_NORMAL;
 
-    public function __construct($id = '', $title = '', $properties = null)
+    private $_typeClass = array(
+        'btn-default',
+        'btn-primary',
+        'btn-info',
+        'btn-success',
+        'btn-warning',
+        'btn-danger',
+        'btn-inverse'
+    );
+
+
+    public function __construct($id = '', $title = '', $type = self::BUTTON_TYPE_NORMAL, $properties = null)
     {
 
         $this->enableLog();
@@ -27,6 +41,7 @@ class anvilButtonDropdown extends anvilContainer
         parent::__construct($id, $properties);
 
         $this->title      = $title;
+        $this->type = $type;
     }
 
     public function addDivider()
@@ -92,16 +107,18 @@ class anvilButtonDropdown extends anvilContainer
 
         } else {
             //---- Render Button Link ----------------------------------------------
-            $return .= '<a class="btn';
+            $return .= '<button type="button" class="btn';
+
+            $return .= ' ' . $this->_typeClass[$this->type];
 
             if (!empty($this->buttonClass)) {
                 $return .= ' ' . $this->buttonClass;
             }
 
-            $return .= ' dropdown-toggle" data-toggle="dropdown" href="#">';
+            $return .= ' dropdown-toggle" data-toggle="dropdown">';
             $return .= $this->title;
-            $return .= '<span class="caret"></span>';
-            $return .= '</a>';
+            $return .= ' <span class="caret"></span>';
+            $return .= '</button>';
         }
 
 
@@ -109,7 +126,7 @@ class anvilButtonDropdown extends anvilContainer
         if (!empty($this->dropdownClass)) {
             $return .= ' ' . $this->dropdownClass;
         }
-        $return .= '">';
+        $return .= '" role="menu">';
 
         $return .= $this->renderControls();
 
@@ -121,5 +138,3 @@ class anvilButtonDropdown extends anvilContainer
     }
 
 }
-
-?>
