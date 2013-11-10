@@ -233,11 +233,13 @@ class anvilPageNav extends anvilControlAbstract
 
 
         if ($this->totalPages <= 1) {
-            $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName . '</a></li>';
+            $html .= '<li class="pages">' . $this->totalItems . '&nbsp;' . $this->totalItemsName . '</li>';
         } else {
-            $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName;
+            $html .= '<li class="pages"><a href="#" class="hidden-xs">' . $this->totalItems;
+            $html .= ' ' . $this->totalItemsName;
+
             if ($this->showPageCount) {
-                $html .= '&nbsp;in&nbsp;' . $this->totalPages . ' Pages';
+                $html .= ', ' . $this->totalPages . ' Pages';
             }
             $html .= '</a></li>';
 
@@ -294,11 +296,11 @@ class anvilPageNav extends anvilControlAbstract
                     $html .= '<li class="active"><a class="active" href="#">' . $i . '</a></li>';
                 } else {
                     $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $i);
-                    $html .= '<li><a href="' . htmlentities($url) . '"';
+                    $html .= '<li><a href="' . htmlentities($url) . '" class="hidden-xs"';
 
-                    if ($i == $this->currentPage) {
-                        $html .= ' class="active"';
-                    }
+//                    if ($i == $this->currentPage) {
+//                        $html .= ' class="active"';
+//                    }
                     $html .= '>' . $i . '</a>';
                     $html .= '</li>';
                 }
