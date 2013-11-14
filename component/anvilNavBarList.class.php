@@ -82,6 +82,10 @@ class anvilNavBarList extends anvilContainer
         //---- Class
         $return .= ' class="nav navbar-nav';
         $return .= ' ' . $this->_alignClass[$this->align];
+
+        if (!empty($this->class)) {
+            $return .= ' ' . $this->class;
+        }
         $return .= '">' . PHP_EOL;
 
         $return .= $this->renderControls();
