@@ -26,6 +26,10 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
         'navbar-static-top'
     );
 
+    /** @var \anvilContainer $footerControls */
+    private $footerControls;
+
+    /** @var \anvilContainer $headerControls */
     private $headerControls;
 
     private $typeClass = array(
@@ -46,7 +50,14 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
         $this->align = $align;
         $this->type = $type;
 
+        $this->footerControls = new anvilContainer();
         $this->headerControls = new anvilContainer();
+    }
+
+
+    public function addFooterControl($control)
+    {
+        $this->footerControls->addControl($control);
     }
 
 
@@ -126,6 +137,11 @@ class anvilNavBar extends anvilContainer implements anvilNavBarAlignInterface, a
         //---- End Collapsible Content -----------------------------------------
         $return .= '</div>' . PHP_EOL;
 
+
+        //---- Footer Controls ---------------------------------------------------
+        $return .= '<div class="navbar-footer">' . PHP_EOL;
+        $return .= $this->footerControls->render();
+        $return .= '</div>' . PHP_EOL;
 
         //---- Render Container Footer -----------------------------------------
         $return .= $this->renderContainerFooter();
