@@ -3,75 +3,51 @@ require_once('anvilControl.abstract.php');
 
 
 /**
-* Page Control
-*
-* @copyright 	Copyright (c) 2010-2011 Nick Slevkoff ({@link http://www.slevkoff.com})
-* @license		http://www.phpanvil.com/LICENSE.txt		New BSD License
-* @version		1.0
- * @ingroup     phpAnvilTools
-*/
-
-
+ * Page Control
+ *
+ * @copyright      Copyright (c) 2010-2011 Nick Slevkoff ({@link http://www.slevkoff.com})
+ * @license        http://www.phpanvil.com/LICENSE.txt		New BSD License
+ * @version        1.0
+ * @ingroup        phpAnvilTools
+ */
 class anvilPageNav extends anvilControlAbstract
 {
 
-//    const NAME                = 'anvilPageNav';
-//    const VERSION            = '3.0';
-//    const VERSION_BUILD     = '8';
-//    const VERSION_DTS        = '4/6/2009 8:45:00 PM PST';
-//    const COPYRIGHT            = 'Copyright (c) 2009 by Devuture, Inc.';
-
-
-    public $qsPrefix = 'pn_';
-
-    public $useDIV = true;
-
-    public $maxNavPages = 5;
-
-//    public $htmlID = 'pageNav';
-
-//    public $mainClass;
-
-//    public $maxRows = 25;
-//    public $maxNavPages = 7;
-
     public $currentPage = 1;
-    public $totalPages = 1;
-    public $showPageCount = true;
-
-    public $totalItems = 0;
-    public $totalItemsName = 'Rows';
-
-    public $itemsPerPage = 25;
-    public $itemOffset = 0;
-    public $pagePath = '';
-
-    public $imageNext = 'bPageNavNext.png';
-    public $imagePrev = 'bPageNavPrev.png';
     public $imageFirst = 'bPageNavFirst.png';
     public $imageLast = 'bPageNavLast.png';
+    public $imageNext = 'bPageNavNext.png';
     public $imagePath = 'images/';
-
-//    public $phraseNext = '&gt;';
-//    public $phrasePrev = '&lt;';
-//    public $phraseFirst = '«';
-//    public $phraseLast = '»';
-
-    public $phraseNext = 'Next&nbsp;»';
-    public $phrasePrev = '«&nbsp;Previous';
+    public $imagePrev = 'bPageNavPrev.png';
+    public $itemOffset = 0;
+    public $itemsPerPage = 25;
+    public $maxNavPages = 5;
+    public $pagePath = '';
     public $phraseFirst = 'First';
     public $phraseLast = 'Last';
+    public $phraseNext = 'Next&nbsp;»';
+    public $phrasePrev = '«&nbsp;Previous';
+    public $qsPrefix = 'pn_';
+    public $showPageCount = true;
+    public $totalItems = 0;
+    public $totalItemsName = 'Rows';
+    public $totalPages = 1;
+    public $useDIV = true;
 
 
-    public function __construct($id = 'pageNav', $class = 'pageNav', $qsPrefix = 'pn_', $properties = null)
-    {
+    public function __construct(
+        $id = 'pageNav',
+        $class = 'pageNav',
+        $qsPrefix = 'pn_',
+        $properties = null
+    ) {
 //        $this->_traceEnabled = $traceEnabled;
 
         $this->enableLog();
 
         parent::__construct($id, $properties);
 
-        $this->class = $class;
+        $this->class    = $class;
         $this->qsPrefix = $qsPrefix;
 
         $this->imagePath = $this->getBasePath() . '/images/';
@@ -80,22 +56,24 @@ class anvilPageNav extends anvilControlAbstract
         $sessionKey = '';
         if ($id == 'pageNav') {
             $this->currentPage = isset($_GET[$this->qsPrefix . 'pg'])
-                    ? intval($_GET[$this->qsPrefix . 'pg'])
-                            : 1;
+                ? intval($_GET[$this->qsPrefix . 'pg'])
+                : 1;
         } else {
             $sessionKey        = 'pageNav.current.' . $this->id;
             $this->currentPage = (isset($_GET[$this->qsPrefix . 'pg'])
-                    ? intval($_GET[$this->qsPrefix . 'pg'])
-                    : (isset($_SESSION[$sessionKey])
-                            ? intval($_SESSION[$sessionKey])
-                            : 1));
+                ? intval($_GET[$this->qsPrefix . 'pg'])
+                : (isset($_SESSION[$sessionKey])
+                    ? intval($_SESSION[$sessionKey])
+                    : 1));
         }
 
-        if ((int)$this->currentPage < 2) {
-            $this->itemOffset = 0;
+        if (intval($this->currentPage) < 2) {
+            $this->itemOffset  = 0;
             $this->currentPage = 1;
         } else {
-            $this->itemOffset = ((int)$this->currentPage - 1) * (int)$this->itemsPerPage;
+            $this->itemOffset = (intval($this->currentPage) - 1) * intval(
+                    $this->itemsPerPage
+                );
         }
 
         if ($id != 'pageNav') {
@@ -104,11 +82,25 @@ class anvilPageNav extends anvilControlAbstract
     }
 
 
+    public function getBasePath()
+    {
+        $path = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on')
+            ? 'https://'
+            : 'http://';
+        $path .= $_SERVER["SERVER_NAME"];
+        if ($_SERVER["SERVER_PORT"] != '80' && $_SERVER["SERVER_PORT"] != '443') {
+            $path .= ':' . $_SERVER["SERVER_PORT"];
+        }
+
+        return $path;
+    }
+
+
     public function __set($propertyName, $value)
     {
-        global $firePHP;
+//        global $firePHP;
 
-        $return = '';
+//        $return = '';
 
         $return = parent::__set($propertyName, $value);
 
@@ -117,17 +109,22 @@ class anvilPageNav extends anvilControlAbstract
             case 'totalPages':
             case 'itemsPerPage':
 
-                $this->totalPages = ceil((int)$this->totalItems / (int)$this->itemsPerPage);
+                $this->totalPages = ceil(
+                    intval($this->totalItems) / intval($this->itemsPerPage)
+                );
 //                fb::log('$this->totalPages = ' . $this->totalPages);
+                break;
 
             case 'itemOffset':
             case 'currentPage':
 
                 if ((int)$this->currentPage < 2) {
-                    $this->itemOffset = 0;
+                    $this->itemOffset  = 0;
                     $this->currentPage = 1;
                 } else {
-                    $this->itemOffset = ((int)$this->currentPage - 1) * (int)$this->itemsPerPage;
+                    $this->itemOffset = (intval(
+                                $this->currentPage
+                            ) - 1) * intval($this->itemsPerPage);
                 }
 
 //                fb::log('$this->itemOffset = ' . $this->itemOffset);
@@ -138,15 +135,6 @@ class anvilPageNav extends anvilControlAbstract
         return $return;
     }
 
-
-    public function reset()
-    {
-        $sessionKey = 'pageNav.current.' . $this->id;
-        $_SESSION[$sessionKey] = 1;
-
-        $this->itemOffset = 0;
-        $this->currentPage = 1;
-    }
 
     public function renderHTML($devTemplate = null)
     {
@@ -169,41 +157,41 @@ class anvilPageNav extends anvilControlAbstract
 
         #---- Auto-Detect anvilPageNav Variables
 //        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Auto-Detecting QueryString Variables...');
-/*
-        $queryString = '';
+        /*
+                $queryString = '';
 
-        foreach ($_GET as $param => $value)
-        {
-            switch ($param) {
-                case $this->qsPrefix . 'pg':
-//                    $this->currentPage = $value;
+                foreach ($_GET as $param => $value)
+                {
+                    switch ($param) {
+                        case $this->qsPrefix . 'pg':
+        //                    $this->currentPage = $value;
 
-//                    if ((int)$this->currentPage < 2) {
-//                        $this->itemOffset = 0;
-//                        $this->currentPage = 1;
-//                    } else {
-//                        $this->itemOffset = ((int)$this->currentPage - 1) * (int)$this->itemsPerPage;
-//                    }
+        //                    if ((int)$this->currentPage < 2) {
+        //                        $this->itemOffset = 0;
+        //                        $this->currentPage = 1;
+        //                    } else {
+        //                        $this->itemOffset = ((int)$this->currentPage - 1) * (int)$this->itemsPerPage;
+        //                    }
 
-//                    fb::log($param . ' = ' . $value);
-//                    fb::log('$this->itemOffset = ' . $this->itemOffset);
+        //                    fb::log($param . ' = ' . $value);
+        //                    fb::log('$this->itemOffset = ' . $this->itemOffset);
 
-                    break;
+                            break;
 
-                case $phpAnvil->qsModule:
-                case $phpAnvil->qsAction:
-                    break;
+                        case $phpAnvil->qsModule:
+                        case $phpAnvil->qsAction:
+                            break;
 
-                default:
-                    $queryString .= '&' . $param . '=' . $value;
-            }
-        }
+                        default:
+                            $queryString .= '&' . $param . '=' . $value;
+                    }
+                }
 
-        if (!empty($queryString))
-        {
-            $queryString = substr($queryString, 1);
-        }
-*/
+                if (!empty($queryString))
+                {
+                    $queryString = substr($queryString, 1);
+                }
+        */
 
         #----- Build URL Strings
 //        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Building URL Strings...');
@@ -260,7 +248,9 @@ class anvilPageNav extends anvilControlAbstract
 //            }
 
 
-        $this->totalPages = ceil((int)$this->totalItems / (int)$this->itemsPerPage);
+        $this->totalPages = ceil(
+            (int)$this->totalItems / (int)$this->itemsPerPage
+        );
 
         if ((int)$this->currentPage < 2) {
             $this->itemOffset  = 0;
@@ -271,18 +261,18 @@ class anvilPageNav extends anvilControlAbstract
 
         #---- Render Page Navigation HTML
 //            $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, 'Rendering Page Navigation HTML...');
-            $pagesPerSide = ($this->maxNavPages - 1) / 2;
+        $pagesPerSide = ($this->maxNavPages - 1) / 2;
 
-            $this->_logDebug($pagesPerSide, '$pagesPerSide');
+        $this->_logDebug($pagesPerSide, '$pagesPerSide');
 
 //            fb::log($pagesPerSide, '$pagesPerSide');
 
 //            if ($this->useDIV) {
-                $html = '<div id="' . $this->id . '" class="pagination';
-                if (!empty($this->class)) {
-                    $html .= ' ' . $this->class;
-                }
-                $html .= '"><ul>';
+        $html = '<div id="' . $this->id . '" class="pagination';
+        if (!empty($this->class)) {
+            $html .= ' ' . $this->class;
+        }
+        $html .= '"><ul>';
 //            } else {
 //                $html = '<table id="' . $this->id . '" class="' . $this->class . '" width="100%"><tr>';
 //            }
@@ -294,200 +284,260 @@ class anvilPageNav extends anvilControlAbstract
 //            }
 
 
-            $this->_logDebug($this->totalPages, '$this->totalPages');
+        $this->_logDebug($this->totalPages, '$this->totalPages');
 
 
-            if ($this->totalPages <= 1) {
+        if ($this->totalPages <= 1) {
 //                if ($this->useDIV) {
-                    $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName . '</a></li>';
+            $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName . '</a></li>';
 //                } else {
 //                    $html .= '<td class="pages" width="100%">' . $this->totalItems . ' ' . $this->totalItemsName . '</td>';
 //                }
-            } else {
+        } else {
 //                if ($this->useDIV) {
-                    $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName;
-                if ($this->showPageCount) {
-                    $html .= '&nbsp;in&nbsp;' . $this->totalPages . ' Pages';
-                }
-                $html .= ':</a></li>';
+            $html .= '<li class="pages"><a href="#">' . $this->totalItems . '&nbsp;' . $this->totalItemsName;
+            if ($this->showPageCount) {
+                $html .= '&nbsp;in&nbsp;' . $this->totalPages . ' Pages';
+            }
+            $html .= ':</a></li>';
 //                } else {
 //                    $html .= '<td class="pages" width="100%">' . $this->totalItems . '&nbsp;' . $this->totalItemsName . '&nbsp;in&nbsp;' . $this->totalPages . '&nbsp;Pages:</td>';
 //                }
 
-                if ($this->totalPages >= ($this->maxNavPages * 2)) {
-                    if ($this->currentPage == 1) {
+            if ($this->totalPages >= ($this->maxNavPages * 2)) {
+                if ($this->currentPage == 1) {
 //                        if ($this->useDIV) {
 //                            $html .= '<li class="disabled">' . $this->phraseFirst . '</li>';
 //                        } else {
 //                            $html .= '<td class="disabled">' . $this->phraseFirst . '</td>';
 //                        }
-                    } else {
-                        $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', 1);
+                } else {
+                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', 1);
 //                        if ($this->useDIV) {
-                            $html .= '<li class="first"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseFirst . '</a></li>';
+                    $html .= '<li class="first"><a class="btn btn-small" href="' . htmlentities(
+                            $url
+                        ) . '">' . $this->phraseFirst . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="first"><a href="' . htmlentities($url) . '">' . $this->phraseFirst . '</a></td>';
 //                        }
-                    }
                 }
+            }
 
-                if ($this->currentPage == 1) {
+            if ($this->currentPage == 1) {
 //                    if ($this->useDIV) {
 //                        $html .= '<li class="disabled">' . $this->phrasePrev . '</li>';
 //                    } else {
 //                        $html .= '<td class="disabled">' . $this->phrasePrev . '</td>';
 //                    }
-                } else {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage-1);
+            } else {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage - 1
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li class="prev"><a class="btn btn-small" href="' . htmlentities($url) . '" class="nextPrev">' . $this->phrasePrev . '</a></li>';
+                $html .= '<li class="prev"><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '" class="nextPrev">' . $this->phrasePrev . '</a></li>';
 //                    } else {
 //                        $html .= '<td class="prev"><a href="' . htmlentities($url) . '" class="nextPrev">' . $this->phrasePrev . '</a></td>';
 //                    }
-                }
+            }
 
-                if (($this->currentPage - 1000) > 1) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 1000);
+            if (($this->currentPage - 1000) > 1) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage - 1000
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 1000) . '...</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">' . ($this->currentPage - 1000) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 1000) . '...</a></td>';
 //                    }
-                }
+            }
 
-                if (($this->currentPage - 100) > 1) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 100);
+            if (($this->currentPage - 100) > 1) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage - 100
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 100) . '...</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">' . ($this->currentPage - 100) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 100) . '...</a></td>';
 //                    }
-                }
+            }
 
-                if (($this->currentPage - 10) > 1) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage - 10);
+            if (($this->currentPage - 10) > 1) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage - 10
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">' . ($this->currentPage - 10) . '...</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">' . ($this->currentPage - 10) . '...</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">' . ($this->currentPage - 10) . '...</a></td>';
 //                    }
-                }
+            }
 
 
-                $firstNavPage = $this->currentPage - $pagesPerSide;
-                if ($firstNavPage < 1) {
-                    $firstNavPage = 1;
-                }
+            $firstNavPage = $this->currentPage - $pagesPerSide;
+            if ($firstNavPage < 1) {
+                $firstNavPage = 1;
+            }
 
-                if ($this->totalPages > $this->maxNavPages) {
-                    $totalNavPages = $firstNavPage + ($this->maxNavPages - 1);
+            if ($this->totalPages > $this->maxNavPages) {
+                $totalNavPages = $firstNavPage + ($this->maxNavPages - 1);
 
-                    if ($totalNavPages > $this->totalPages) {
-                        $totalNavPages = $this->totalPages;
-                        $firstNavPage = $totalNavPages - ($this->maxNavPages - 1);
-                    }
-                } else {
+                if ($totalNavPages > $this->totalPages) {
                     $totalNavPages = $this->totalPages;
-                    $firstNavPage = 1;
+                    $firstNavPage  = $totalNavPages - ($this->maxNavPages - 1);
                 }
+            } else {
+                $totalNavPages = $this->totalPages;
+                $firstNavPage  = 1;
+            }
 
 
 //                fb::log($firstNavPage, '$firstNavPage');
 //                fb::log($totalNavPages, '$totalNavPages');
 
-                for ($i=$firstNavPage; $i<=$totalNavPages; $i++) {
-                    if ($i == $this->currentPage) {
+            for ($i = $firstNavPage; $i <= $totalNavPages; $i++) {
+                if ($i == $this->currentPage) {
 //                        if ($this->useDIV) {
-                            $html .= '<li class="active"><a class="btn btn-small active" href="#">' . $i . '</a></li>';
+                    $html .= '<li class="active"><a class="btn btn-small active" href="#">' . $i . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="selected">' . $i . '</td>';
 //                        }
-                    } else {
-                        $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $i);
+                } else {
+                    $url = $this->addQSVar(
+                                $baseURL,
+                                    $this->qsPrefix . 'pg',
+                                    $i
+                    );
 //                        if ($this->useDIV) {
 //                            $html .= '<li><a href="' . htmlentities($baseURL . '&' . $this->qsPrefix . 'pg=' . $i) . '"';
-                            $html .= '<li><a href="' . htmlentities($url) . '"';
+                    $html .= '<li><a href="' . htmlentities($url) . '"';
 //                        } else {
 //                            $html .= '<td><a href="' . htmlentities($baseURL . '&' . $this->qsPrefix . 'pg=' . $i) . '"';
 //                            $html .= '<td><a href="' . htmlentities($url) . '"';
 //                        }
 
-                        $html .= ' class="btn btn-small';
-                        if ($i == $this->currentPage) {
-                            $html .= ' active';
+                    $html .= ' class="btn btn-small';
+                    if ($i == $this->currentPage) {
+                        $html .= ' active';
 //                        } else {
 //                            $html .= ' class="btn btn-small"';
-                        }
-                        $html .= '">' . $i . '</a>';
+                    }
+                    $html .= '">' . $i . '</a>';
 //                        if ($this->useDIV) {
-                            $html .= '</li>';
+                    $html .= '</li>';
 //                        } else {
 //                            $html .= '</td>';
 //                        }
-                    }
                 }
+            }
 
-                if (($this->currentPage + 10) < $this->totalPages) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 10);
+            if (($this->currentPage + 10) < $this->totalPages) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage + 10
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 10) . '</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">...' . ($this->currentPage + 10) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 10) . '</a></td>';
 //                    }
-                }
+            }
 
-                if (($this->currentPage + 100) < $this->totalPages) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 100);
+            if (($this->currentPage + 100) < $this->totalPages) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage + 100
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 100) . '</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">...' . ($this->currentPage + 100) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 100) . '</a></td>';
 //                    }
-                }
+            }
 
-                if (($this->currentPage + 1000) < $this->totalPages) {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage + 1000);
+            if (($this->currentPage + 1000) < $this->totalPages) {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage + 1000
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li><a class="btn btn-small" href="' . htmlentities($url) . '">...' . ($this->currentPage + 1000) . '</a></li>';
+                $html .= '<li><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">...' . ($this->currentPage + 1000) . '</a></li>';
 //                    } else {
 //                        $html .= '<td><a href="' . htmlentities($url) . '">...' . ($this->currentPage + 1000) . '</a></td>';
 //                    }
-                }
+            }
 
-                if ($this->currentPage == $this->totalPages) {
+            if ($this->currentPage == $this->totalPages) {
 //                    if ($this->useDIV) {
 //                        $html .= '<li class="disabled">' . $this->phraseNext . '</li>';
 //                    } else {
 //                        $html .= '<td class="disabled">' . $this->phraseNext . '</td>';
 //                    }
-                } else {
-                    $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->currentPage+1);
+            } else {
+                $url = $this->addQSVar(
+                            $baseURL,
+                                $this->qsPrefix . 'pg',
+                                $this->currentPage + 1
+                );
 //                    if ($this->useDIV) {
-                        $html .= '<li class="next"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseNext . '</a></li>';
+                $html .= '<li class="next"><a class="btn btn-small" href="' . htmlentities(
+                        $url
+                    ) . '">' . $this->phraseNext . '</a></li>';
 //                    } else {
 //                        $html .= '<td class="next"><a href="' . htmlentities($url) . '">' . $this->phraseNext . '</a></td>';
 //                    }
-                }
+            }
 
-                if ($this->totalPages >= ($this->maxNavPages * 2)) {
-                    if ($this->currentPage == $this->totalPages) {
+            if ($this->totalPages >= ($this->maxNavPages * 2)) {
+                if ($this->currentPage == $this->totalPages) {
 //                        if ($this->useDIV) {
 //                            $html .= '<li class="disabled">' . $this->phraseFirst . '</li>';
 //                        } else {
 //                            $html .= '<td class="disabled">' . $this->phraseFirst . '</td>';
 //                        }
-                    } else {
-                        $url = $this->addQSVar($baseURL, $this->qsPrefix . 'pg', $this->totalPages);
+                } else {
+                    $url = $this->addQSVar(
+                                $baseURL,
+                                    $this->qsPrefix . 'pg',
+                                    $this->totalPages
+                    );
 //                        if ($this->useDIV) {
-                            $html .= '<li class="last"><a class="btn btn-small" href="' . htmlentities($url) . '">' . $this->phraseLast . '</a></li>';
+                    $html .= '<li class="last"><a class="btn btn-small" href="' . htmlentities(
+                            $url
+                        ) . '">' . $this->phraseLast . '</a></li>';
 //                        } else {
 //                            $html .= '<td class="last"><a href="' . htmlentities($url) . '">' . $this->phraseLast . '</a></td>';
 //                        }
-                    }
                 }
             }
+        }
 //            if ($this->useDIV) {
-                $html .= '</ul></div>';
+        $html .= '</ul></div>';
 //            } else {
 //                $html .= '</tr></table>';
 //            }
@@ -504,40 +554,6 @@ class anvilPageNav extends anvilControlAbstract
 
     }
 
-    function addQSVar($url, $key, $value)
-    {
-//        $url = preg_replace('/(.*)(?|&)' . $key . '=[^&]+?(&)(.*)/i', '$1$2$4', $url . '&');
-//        $url = substr($url, 0, -1);
-        $url = $this->removeQSVar($url, $key);
-        if (strpos($url, '?') === false) {
-            return ($url . '?' . $key . '=' . $value);
-        } else {
-            return ($url . '&' . $key . '=' . $value);
-        }
-    }
-
-
-    function removeQSVar($url, $key)
-    {
-//        $this->_logDebug('/(?:&|(\?))' . $key . '=[^&]*(?(1)&|)?/i', 'RegEx');
-        
-        $url = preg_replace('/(?:&|(\?))' . $key . '=[^&]*(?(1)&|)?/i', '$1$2$4', $url . '&');
-        $url = substr($url, 0, -1);
-        return $url;
-    }
-
-
-    public function getBasePath()
-    {
-        $path = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on')
-                ? 'https://' : 'http://';
-        $path .= $_SERVER["SERVER_NAME"];
-        if ($_SERVER["SERVER_PORT"] != '80' && $_SERVER["SERVER_PORT"] != '443') {
-            $path .= ':' . $_SERVER["SERVER_PORT"];
-        }
-
-        return $path;
-    }
 
     public function getPagePath()
     {
@@ -557,9 +573,45 @@ class anvilPageNav extends anvilControlAbstract
         return $return;
     }
 
+
+    function removeQSVar($url, $key)
+    {
+//        $this->_logDebug('/(?:&|(\?))' . $key . '=[^&]*(?(1)&|)?/i', 'RegEx');
+
+        $url = preg_replace(
+            '/(?:&|(\?))' . $key . '=[^&]*(?(1)&|)?/i',
+            '$1$2$4',
+            $url . '&'
+        );
+        $url = substr($url, 0, -1);
+
+        return $url;
+    }
+
+
+    function addQSVar($url, $key, $value)
+    {
+//        $url = preg_replace('/(.*)(?|&)' . $key . '=[^&]+?(&)(.*)/i', '$1$2$4', $url . '&');
+//        $url = substr($url, 0, -1);
+        $url = $this->removeQSVar($url, $key);
+        if (strpos($url, '?') === false) {
+            return ($url . '?' . $key . '=' . $value);
+        } else {
+            return ($url . '&' . $key . '=' . $value);
+        }
+    }
+
+
+    public function reset()
+    {
+        $sessionKey            = 'pageNav.current.' . $this->id;
+        $_SESSION[$sessionKey] = 1;
+
+        $this->itemOffset  = 0;
+        $this->currentPage = 1;
+    }
+
 }
-
-
 
 
 ?>
