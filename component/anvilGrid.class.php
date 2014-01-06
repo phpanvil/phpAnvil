@@ -275,13 +275,11 @@ class anvilGrid extends anvilControlAbstract
         $startTime = microtime(true);
         $this->_logVerbose('Executing...');
 
-        if (isset($this->anvilPageNav)) {
+        if (isset($this->anvilPageNav) && ($this->pageNavHeaderEnabled || $this->pageNavFooterEnabled)) {
+            $pageNavHTML = $this->anvilPageNav->render();
+
             $this->rowOffset = $this->anvilPageNav->itemOffset;
             $this->maxRows   = $this->anvilPageNav->itemsPerPage;
-
-            if ($this->pageNavHeaderEnabled || $this->pageNavFooterEnabled) {
-                $pageNavHTML = $this->anvilPageNav->render();
-            }
 
             //---- Render anvilPageNav Header -------------------------------------
             if ($this->pageNavHeaderEnabled && !$this->dataRowsOnly && ($this->anvilPageNav->totalItems >= 5)) {
@@ -388,7 +386,7 @@ class anvilGrid extends anvilControlAbstract
 //        $this->_addTraceInfo(__FILE__, __METHOD__, __LINE__, $sql);
         //            $firePHP->_log($sql);
         //            fb::Log($sql, '$sql');
-//        $this->_logDebug($sql, 'anvilGrid SQL');
+        $this->_logDebug($sql, 'anvilGrid SQL');
 
         if (isset($this->gridRS)) {
             $objRS = $this->gridRS;
