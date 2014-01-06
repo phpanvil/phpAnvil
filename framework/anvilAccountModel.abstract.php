@@ -13,7 +13,7 @@ abstract class anvilAccountModelAbstract extends anvilRSModelAbstract
     {
         parent::__construct($primaryTableName, $primaryFieldName);
 
-        $this->enableLog();
+//        $this->enableLog();
 
         $this->fields->id->fieldName = 'account_id';
         $this->fields->id->fieldType = anvilModelField::DATA_TYPE_NUMBER;

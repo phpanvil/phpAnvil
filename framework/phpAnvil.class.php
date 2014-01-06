@@ -124,7 +124,7 @@ class phpAnvil2 extends anvilObjectAbstract
     {
 //        global $options;
 
-        $this->enableLog();
+//        $this->enableLog();
 
         $this->_core = $this;
 

@@ -23,7 +23,7 @@ class anvilRegional extends anvilObjectAbstract
 
 	public function __construct()
     {
-        $this->enableLog();
+//        $this->enableLog();
 
         //---- Create DateTimeZone defaulting to PST ---------------------------
         //-- Change timezones using $regional->dateTimeZone->setTimezone($timezone)
@@ -46,5 +46,3 @@ class anvilRegional extends anvilObjectAbstract
 
 
 }
-
-?>

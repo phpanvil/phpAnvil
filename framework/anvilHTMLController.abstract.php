@@ -168,17 +168,17 @@ abstract class anvilHTMLControllerAbstract extends anvilControllerAbstract
 
 
         if (is_object($this->_template)) {
-            $this->_logVerbose('Cloning template for use...');
+//            $this->_logVerbose('Cloning template for use...');
             $this->_template = clone $this->_template;
         }
 
-        $this->_logVerbose('Assigning tokens...');
+//        $this->_logVerbose('Assigning tokens...');
         $this->_assignTokens();
 
-        $this->_logVerbose('Rendering controls...');
+//        $this->_logVerbose('Rendering controls...');
         $this->_displayControls();
 
-        $this->_logVerbose('Rendering complete, template engine has the wheel...');
+//        $this->_logVerbose('Rendering complete, template engine has the wheel...');
 
         return $this->_template->display($this->_templateFilename);
 

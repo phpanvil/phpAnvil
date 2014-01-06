@@ -278,7 +278,7 @@ abstract class anvilModelAbstract extends anvilObjectAbstract
         }
 
 
-        $this->_logDebug($return, 'cleaned');
+//        $this->_logDebug($return, 'cleaned');
 
         return $return;
     }
